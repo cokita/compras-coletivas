@@ -13,13 +13,15 @@ import { MaterialSharedModule } from './material-shared/material-shared.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { AppRoutingModule } from './/app-routing.module';
+import { UserComponent } from './user/user.component';
 
 library.add(faCoffee, fas, far);
 
 @NgModule({
     declarations: [
         AppComponent,
-        LoginComponent
+        LoginComponent,
+        UserComponent
     ],
     imports: [
         BrowserModule,
