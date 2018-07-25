@@ -1,43 +1,31 @@
-<div layout="column" class="zero">
-    <div flex="66">
-    <mat-card class="example-card">
-        <mat-card-header>
-            <mat-card-title>
-                <h1 class="md-display-3">Login</h1>
-            </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <form class="example-form">
-                <table class="example-full-width" cellspacing="0">
-                    <tr>
-                        <td>
-                            <mat-form-field class="example-full-width">
+<div >
+    <div class="container" fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex="30%">
+            <mat-card class="example-card" fxLayout="column" fxLayoutAlign="center center">
+                <mat-card-header>
+                    <mat-card-title>
+                        <h1 class="md-display-3">Login</h1>
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="full-width">
+                    <form class="example-form">
+                        <div>
+                            <mat-form-field class="full-width">
                                 <input matInput placeholder="Username" [(ngModel)]="username" name="username" required>
                             </mat-form-field>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <mat-form-field class="example-full-width">
+                        </div>
+                        <div>
+                            <mat-form-field class="full-width">
                                 <input matInput placeholder="Password" [(ngModel)]="password" type="password" name="password" required>
                             </mat-form-field>
-                        </td>
-                    </tr>
-                </table>
-            </form>
-            <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
-        </mat-card-content>
-        <mat-card-actions>
-            <button mat-raised-button (click)="login()" color="primary">Login</button>
-        </mat-card-actions>
-    </mat-card></div>
+                        </div>
+                    </form>
+                    <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-raised-button (click)="login()" color="primary">Login</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
 </div>
-
-<div layout="row">
-        <div flex>First item in row</div>
-        <div flex>Second item in row</div>
-      </div>
-      <div layout="column">
-        <div flex>First item in column</div>
-        <div flex>Second item in column</div>
-      </div>
