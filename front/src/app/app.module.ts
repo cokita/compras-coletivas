@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule ,ReactiveFormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
@@ -28,7 +29,8 @@ library.add(faCoffee, fas, far);
         AppRoutingModule,
         FontAwesomeModule,
         BrowserAnimationsModule,
-        MaterialSharedModule
+        MaterialSharedModule,
+        FlexLayoutModule
     ],
     providers: [],
     bootstrap: [AppComponent]
