@@ -1,3 +1,4 @@
 .idea
 .idea/*
 front/yarn.lock
+front/package-lock.json

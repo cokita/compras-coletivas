@@ -1,3 +1,4 @@
+import { UserService } from './service/user.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule ,ReactiveFormsModule } from '@angular/forms';
@@ -9,18 +10,22 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { MaterialSharedModule } from './material-shared/material-shared.module';
-
+import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { AppRoutingModule } from './/app-routing.module';
+import { UserComponent } from './user/user.component';
+import { MaskDirective } from './mask/mask.directive';
 
 library.add(faCoffee, fas, far);
 
 @NgModule({
     declarations: [
         AppComponent,
-        LoginComponent
+        LoginComponent,
+        UserComponent,
+        MaskDirective
     ],
     imports: [
         BrowserModule,
@@ -30,9 +35,10 @@ library.add(faCoffee, fas, far);
         FontAwesomeModule,
         BrowserAnimationsModule,
         MaterialSharedModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        HttpModule
     ],
-    providers: [],
+    providers: [ UserService ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
