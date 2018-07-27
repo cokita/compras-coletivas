@@ -7,7 +7,8 @@ import { User } from './user';
 @Component({
 	selector: 'app-user',
 	templateUrl: './user.component.html',
-	styleUrls: ['./user.component.scss']
+	styleUrls: ['./user.component.scss'],
+	providers: [UserService]
 })
 export class UserComponent implements OnInit {
 
@@ -15,6 +16,7 @@ export class UserComponent implements OnInit {
 	
 	user: User = new User();
 	registerForm: FormGroup;
+	result: string;
 
 	validateFormControl = new FormControl('', [
 		Validators.required,
@@ -32,12 +34,20 @@ export class UserComponent implements OnInit {
 	}
 
 	save() {
-		let result;
+		//let result;
 		this.user.cpf = this.registerForm.controls.cpf.value;
 		this.user.nome = this.registerForm.controls.nome.value;
 		this.user.telefone = this.registerForm.controls.telefone.value;
 		this.user.email = this.registerForm.controls.email.value;
-		result = this.userService.addUser(this.user);
+		
+		
+		this.userService.addUser(this.user).subscribe(data => this.result = JSON.stringify(data),
+							error => alert(error),
+						() => console.log('acesso a webapi post ok')
+					);
+		console.log('Resultado: ' + this.result);		
+		
+		//this.result = this.userService.addUser(this.user);
 	}
 
 }

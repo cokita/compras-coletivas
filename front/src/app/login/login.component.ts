@@ -1,3 +1,4 @@
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
@@ -8,9 +9,26 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  constructor(private formBuilder: FormBuilder) {} 
+	
+	registerForm: FormGroup;
+	result: string;
 
-  ngOnInit() {
+	validateFormControl = new FormControl('', [
+		Validators.required,
+		Validators.email,
+	]);
+
+	ngOnInit() {
+		this.registerForm = this.formBuilder.group({
+			username: ['', Validators.required],
+			password: ['', Validators.required]
+		});
+  }
+	
+		
+  login() {
+    console.log(this.registerForm.controls);
   }
 
 }

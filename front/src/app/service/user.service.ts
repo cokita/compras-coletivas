@@ -7,6 +7,7 @@ export class UserService {
  
   // URL da nossa API
   private url: string = "http://localhost:3000/questions";
+
  
   constructor(private http: Http) { }
  
@@ -22,7 +23,9 @@ export class UserService {
  
   addUser(user){
     console.log(user);
-    return this.http.post(this.url, {'user': user})
+    var json = JSON.stringify({'user': user});
+    var params = 'json=' + json;
+    return this.http.post('http://validate.jsontest.com?json=' + json, params)
       .pipe(map(res => res.json()));
   }
  
