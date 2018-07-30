@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('cellphone');
             $table->string('cpf');
+            $table->date('birthday')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

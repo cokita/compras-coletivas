@@ -7,7 +7,6 @@ class UsersTableSeeder extends Seeder {
 
     public function run()
     {
-        dd(bcrypt('abcd1234'));
         DB::table('users')->delete();
 
         User::create(['email' => 'cokitabr@gmail.com', 

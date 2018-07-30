@@ -4,22 +4,43 @@ use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Validator;
+
+
 class AuthController extends Controller
 {
+    /**
+     * Object
+     * {
+     *      "email": "andrevini@gmail.com",
+     *      "name" : "André Vinicius da Silva Caixeta",
+     *      "password": "abcd1234",
+     *      "cellphone": "61998280155",
+     *      "cpf": "00713877146",
+     *      "birthday": "1985-07-13"
+     *   }
+     */
     public function register(Request $request)
     {
-//         $validatedData = $request->validate([
-//             'email' => 'required|unique:email|max:255',
-//             'name' => 'required',
-//             'password' => 'required',
-//             'cellphone' => 'required',
-//             'cpf' => 'required'
-//         ]);
-// dd($validatedData);
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|unique:users',
+            'name' => 'required',
+            'password' => 'required',
+            'cellphone' => 'required|unique:users',
+            'cpf' => 'required|unique:users|cpf'
+        ]);
+
+        if ($validator->fails()) {    
+            return response()->json($validator->messages(), 200);
+        }
+
         $user = new User;
         $user->email = $request->email;
         $user->name = $request->name;
         $user->password = bcrypt($request->password);
+        $user->cellphone = $request->cellphone;
+        $user->cpf = $request->cpf;
+        $user->birthday = $request->birthday;
         $user->save();
         return response([
             'status' => 'success',
