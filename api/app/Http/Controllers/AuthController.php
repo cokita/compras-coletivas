@@ -1,9 +1,11 @@
 <?php
 namespace App\Http\Controllers;
+use App\Constants\ConstProfile;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 
@@ -22,30 +24,42 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|unique:users',
-            'name' => 'required',
-            'password' => 'required',
-            'cellphone' => 'required|unique:users',
-            'cpf' => 'required|unique:users|cpf'
-        ]);
+        try {
+            DB::beginTransaction();
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|unique:users',
+                'name' => 'required',
+                'password' => 'required',
+                'cellphone' => 'required|unique:users',
+                'cpf' => 'required|unique:users|cpf'
+            ]);
 
-        if ($validator->fails()) {    
-            return response()->json($validator->messages(), 200);
+            if ($validator->fails()) {
+                throw new \Exception($validator->getMessageBag(), 400);
+            }
+
+            $user = new User;
+            $user->email = $request->email;
+            $user->name = $request->name;
+            $user->password = bcrypt($request->password);
+            $user->cellphone = $request->cellphone;
+            $user->cpf = $request->cpf;
+            $user->birthday = $request->birthday;
+            if ($request->gender) {
+                $user->gender = $request->gender;
+            }
+            $user->save();
+            $user->profiles()->attach(ConstProfile::USUARIO);
+
+            DB::commit();
+            return response([
+                'status' => 'success',
+                'data' => $user
+            ], 200);
+        }catch (\Exception $e){
+            DB::rollBack();
+            return response(['status' => 'error', 'data' => $e->getMessage(), 'code' => $e->getCode()]);
         }
-
-        $user = new User;
-        $user->email = $request->email;
-        $user->name = $request->name;
-        $user->password = bcrypt($request->password);
-        $user->cellphone = $request->cellphone;
-        $user->cpf = $request->cpf;
-        $user->birthday = $request->birthday;
-        $user->save();
-        return response([
-            'status' => 'success',
-            'data' => $user
-        ], 200);
     }
     public function login(Request $request)
     {

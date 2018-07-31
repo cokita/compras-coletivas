@@ -9,6 +9,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
+    protected $table = 'users';
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +17,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'cellphone', 'cpf'
+        'name', 'email', 'password', 'cellphone', 'cpf', 'gender', 'active'
     ];
 
     /**
@@ -36,5 +37,11 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function profiles()
+    {
+        return $this->belongsToMany('App\Models\Profiles', 'users_profiles',
+            'user_id', 'profile_id')->withTimestamps();
     }
 }
