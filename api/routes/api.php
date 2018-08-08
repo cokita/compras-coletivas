@@ -18,9 +18,14 @@ use Illuminate\Http\Request;
 // });
 Route::post('signup', 'AuthController@register');
 Route::post('login', 'AuthController@login');
+Route::middleware('jwt.refresh')->get('/token/refresh', 'AuthController@refresh');
 
 Route::group(['prefix' => 'auth', 'middleware' => 'jwt.auth'], function () {
     Route::get('user', 'AuthController@user');
     Route::post('logout', 'AuthController@logout');
 });
-Route::middleware('jwt.refresh')->get('/token/refresh', 'AuthController@refresh');
+
+Route::resource('user', 'UserController', [
+    'except' => ['create', 'edit']
+]);
+

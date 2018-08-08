@@ -44,4 +44,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany('App\Models\Profiles', 'users_profiles',
             'user_id', 'profile_id')->withTimestamps();
     }
+
+    public function stores()
+    {
+        return $this->belongsToMany('App\Models\Stores', 'stores_users',
+            'user_id', 'store_id')->withTimestamps();
+    }
 }
