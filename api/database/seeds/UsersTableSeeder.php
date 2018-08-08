@@ -15,6 +15,13 @@ class UsersTableSeeder extends Seeder {
                       'cellphone' => '61996170178', 
                       'cpf' => '00331948150',
                       'gender' => 'F']);
+
+        User::create(['email' => 'andrevini@gmail.com',
+            'name' => 'André Vincius da Silva Caixeta',
+            'password' => bcrypt('abcd1234'),
+            'cellphone' => '61998280155',
+            'cpf' => '00713877146',
+            'gender' => 'M']);
     }
 
 }

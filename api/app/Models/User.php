@@ -33,7 +33,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
-    
+
     public function getJWTCustomClaims()
     {
         return [];
@@ -49,5 +49,30 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsToMany('App\Models\Stores', 'stores_users',
             'user_id', 'store_id')->withTimestamps();
+    }
+
+    public function hasProfile($roles)
+    {
+        $retorno = false;
+        $profiles = $this->profiles();
+
+        if ($profiles) {
+            foreach($profiles->get() as $profile){
+                if($profile->name == 'Administrador') {
+                    $retorno = true;
+                    break;
+                }else{
+                    foreach ($roles as $role){
+                        if(strtolower($profile->name) == strtolower($role)){
+                            $retorno = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return $retorno;
     }
 }

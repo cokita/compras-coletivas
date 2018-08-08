@@ -15,5 +15,6 @@ class UsersProfilesTableSeeder extends Seeder
         DB::table('users_profiles')->delete();
 
         UsersProfiles::create(['user_id' => 1, 'profile_id' => 1]);
+        UsersProfiles::create(['user_id' => 2, 'profile_id' => 3]);
     }
 }

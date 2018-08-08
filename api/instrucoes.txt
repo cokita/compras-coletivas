@@ -14,6 +14,7 @@ FLUSH PRIVILEGES ;
 
 Laravel Commands
 
+php artisan migrate:reset
 php artisan migrate:refresh --seed
 php artisan db:seed -v
 php artisan make:seeder UsersTableSeeder
