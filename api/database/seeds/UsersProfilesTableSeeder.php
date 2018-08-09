@@ -16,5 +16,6 @@ class UsersProfilesTableSeeder extends Seeder
 
         UsersProfiles::create(['user_id' => 1, 'profile_id' => 1]);
         UsersProfiles::create(['user_id' => 2, 'profile_id' => 3]);
+        UsersProfiles::create(['user_id' => 3, 'profile_id' => 2]);
     }
 }

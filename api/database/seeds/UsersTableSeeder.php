@@ -22,6 +22,13 @@ class UsersTableSeeder extends Seeder {
             'cellphone' => '61998280155',
             'cpf' => '00713877146',
             'gender' => 'M']);
+
+        User::create(['email' => 'gigiovana.caixeta@gmail.com',
+            'name' => 'Giovana Araújo Carvalho da Silva Caixeta',
+            'password' => bcrypt('abcd1234'),
+            'cellphone' => '61999141905',
+            'cpf' => '30326160183',
+            'gender' => 'F']);
     }
 
 }

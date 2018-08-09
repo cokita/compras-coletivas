@@ -20,13 +20,29 @@ Route::middleware('jwt.refresh')->get('/token/refresh', 'AuthController@refresh'
 Route::post('signup', ['as' => 'user.create', 'uses' => 'AuthController@register']);
 Route::post('login', ['as' => 'user.login', 'uses' => 'AuthController@login']);
 
-Route::group(['prefix' => 'auth', 'middleware' => 'jwt.auth'], function () {
-    Route::post('logout', ['as' => 'user.logout', 'uses' => 'AuthController@logout']);
+
+//Resources e rotas exclusivos para ADM
+Route::group(['middleware' => ['jwt.auth', 'roles'],'roles' => ['administrador']], function () {
+    Route::group(['prefix' => 'user'], function () {
+        Route::delete('/{id}', ['as' => 'user.destroy', 'uses' => 'UserController@destroy']);
+        Route::put('/{id}', ['as' => 'user.update', 'uses' => 'UserController@update']);
+    });
+
+    Route::resource('store', 'StoreController', ['except' => ['create', 'edit', 'index']]);
 });
 
-Route::group(['middleware' => ['jwt.auth', 'roles'], 'roles' => ['administrator']], function () {
-    Route::resource('user', 'UserController', [
-        'except' => ['create', 'edit']
-    ]);
+//Resources e rotas exclusivos para ADM e VENDEDORES
+Route::group(['middleware' => ['jwt.auth', 'roles'],'roles' => ['administrador', 'vendedor']], function () {
+    Route::delete('store-user/{user_id}/{store_id}', ['as' => 'store.user.destroy', 'uses' => 'StoreUserController@destroy']);
+    Route::get('store', ['as' => 'store.index', 'uses' => 'StoreController@index']);
+    Route::resource('store-user', 'StoreUserController', ['except' => ['create', 'edit', 'destroy']]);
 });
+
+//TODO melhorar esse esquema de permissoes
+//Rotas que necessitam apenas estar autenticadas
+Route::group(['middleware' => ['jwt.auth']], function () {
+    Route::post('auth/logout', ['as' => 'user.logout', 'uses' => 'AuthController@logout']);
+
+});
+
 

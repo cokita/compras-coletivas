@@ -8,7 +8,7 @@ class Stores extends Model
 {
     protected $table = 'stores';
     protected $fillable = [
-        'id', 'name', 'active', 'user_id'
+        'id', 'name', 'active', 'user_id', 'description'
     ];
 
     public function user()

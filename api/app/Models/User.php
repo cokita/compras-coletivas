@@ -62,11 +62,16 @@ class User extends Authenticatable implements JWTSubject
                     $retorno = true;
                     break;
                 }else{
-                    foreach ($roles as $role){
-                        if(strtolower($profile->name) == strtolower($role)){
-                            $retorno = true;
-                            break;
+                    if(is_array($roles)) {
+                        foreach ($roles as $role) {
+                            if (strtolower($profile->name) == strtolower($role)) {
+                                $retorno = true;
+                                break;
+                            }
                         }
+                    }else if(strtolower($profile->name) == strtolower($roles)) {
+                        $retorno = true;
+                        break;
                     }
                 }
             }
