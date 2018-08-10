@@ -25,7 +25,6 @@ Route::post('login', ['as' => 'user.login', 'uses' => 'AuthController@login']);
 Route::group(['middleware' => ['jwt.auth', 'roles'],'roles' => ['administrador']], function () {
     Route::group(['prefix' => 'user'], function () {
         Route::delete('/{id}', ['as' => 'user.destroy', 'uses' => 'UserController@destroy']);
-        Route::put('/{id}', ['as' => 'user.update', 'uses' => 'UserController@update']);
     });
 
     Route::resource('store', 'StoreController', ['except' => ['create', 'edit', 'index']]);
@@ -41,6 +40,9 @@ Route::group(['middleware' => ['jwt.auth', 'roles'],'roles' => ['administrador',
 //TODO melhorar esse esquema de permissoes
 //Rotas que necessitam apenas estar autenticadas
 Route::group(['middleware' => ['jwt.auth']], function () {
+    Route::put('user/{id}', ['as' => 'user.update', 'uses' => 'UserController@update']);
+    Route::get('user/{id}', ['as' => 'user.show', 'uses' => 'UserController@show']);
+    Route::get('user/', ['as' => 'user.index', 'uses' => 'UserController@index']);
     Route::post('auth/logout', ['as' => 'user.logout', 'uses' => 'AuthController@logout']);
 
 });

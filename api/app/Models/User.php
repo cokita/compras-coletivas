@@ -17,7 +17,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'cellphone', 'cpf', 'gender', 'active'
+        'name', 'email', 'password', 'gender', 'active'
     ];
 
     /**
@@ -41,16 +41,21 @@ class User extends Authenticatable implements JWTSubject
 
     public function profiles()
     {
-        return $this->belongsToMany('App\Models\Profiles', 'users_profiles',
+        return $this->belongsToMany(Profiles::class, 'users_profiles',
             'user_id', 'profile_id')->withTimestamps();
     }
 
     public function stores()
     {
-        return $this->belongsToMany('App\Models\Stores', 'stores_users',
+        return $this->belongsToMany(Stores::class, 'stores_users',
             'user_id', 'store_id')->withTimestamps();
     }
 
+    /**
+     * Retorna se o usuario está em um perfil ou array de perfis
+     *
+     * @return bool
+     */
     public function hasProfile($roles)
     {
         $retorno = false;
@@ -79,5 +84,30 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return $retorno;
+    }
+
+    /**
+     * Passe um profile (name) e ele retornará se EXISTE APENAS esse profile passado.
+     * @param $profile
+     * @return bool
+     */
+    public function isOnlyProfile($profile){
+        $retorno = false;
+        $profiles = $this->profiles();
+
+        if ($profiles) {
+            foreach($profiles->get() as $prof){
+                if(strtolower($prof->name) == strtolower($profile)) {
+                    $retorno = true;
+                    break;
+                }
+            }
+        }
+        $result = false;
+        if($retorno && $profiles->count() == 1){
+            $result = true;
+        }
+
+        return $result;
     }
 }
