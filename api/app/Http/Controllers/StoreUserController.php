@@ -54,7 +54,7 @@ class StoreUserController extends Controller
                 throw new \Exception("Favor informar quais usuários integrarão o grupo.", 412);
             }
 
-            if(!empty($data['store_id'])){
+            if(empty($data['store_id'])){
                 throw new \Exception("Favor informar um grupo para adicionar usuários.", 412);
             }
 
@@ -65,13 +65,16 @@ class StoreUserController extends Controller
             }
 
             if(is_array($data['users']) && $data['users']){
-                $users = User::query()->whereIn('id', implode(',', $data['users']))->where('active', '=',1)->get();
+                $users = User::query()->whereIn('id', $data['users'])->where('active', '=',1)->get();
                 if($users){
                     foreach ($users as $user){
-                        $storeUser = new StoresUsers();
-                        $storeUser->user_id = $user->id;
-                        $storeUser->store_id = $store->id;
-                        $storeUser->save();
+                        $storeUserDb = StoresUsers::query()->where('user_id','=', $user->id)->where('store_id','=', $store->id)->first();
+                        if(!$storeUserDb) {
+                            $storeUser = new StoresUsers();
+                            $storeUser->user_id = $user->id;
+                            $storeUser->store_id = $store->id;
+                            $storeUser->save();
+                        }
                     }
                 }
             }

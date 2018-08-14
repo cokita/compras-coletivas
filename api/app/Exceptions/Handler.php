@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -130,7 +131,9 @@ class Handler extends ExceptionHandler
         if (!$route) {
             $return['status'] = 501;
 
-        } else if ($exception instanceof \Exception) {
+        } else if($exception instanceof AuthenticationException){
+            $return['status'] = 401;
+        }else if ($exception instanceof \Exception) {
 
             if ($exception instanceof ValidationException) {
                 $return['status'] = 412;

@@ -100,10 +100,10 @@ class StoreController extends Controller
      */
     public function show($id)
     {
-        $user = Stores::find($id);
+        $store = Stores::find($id);
         return response([
             'status' => 'success',
-            'data' => $user
+            'data' => $store
         ]);
     }
 

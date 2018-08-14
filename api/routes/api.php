@@ -22,7 +22,7 @@ Route::post('login', ['as' => 'user.login', 'uses' => 'AuthController@login']);
 
 
 //Resources e rotas exclusivos para ADM
-Route::group(['middleware' => ['jwt.auth', 'roles'],'roles' => ['administrador']], function () {
+Route::group(['middleware' => ['auth:api', 'roles'],'roles' => ['administrador']], function () {
     Route::group(['prefix' => 'user'], function () {
         Route::delete('/{id}', ['as' => 'user.destroy', 'uses' => 'UserController@destroy']);
     });
@@ -31,19 +31,20 @@ Route::group(['middleware' => ['jwt.auth', 'roles'],'roles' => ['administrador']
 });
 
 //Resources e rotas exclusivos para ADM e VENDEDORES
-Route::group(['middleware' => ['jwt.auth', 'roles'],'roles' => ['administrador', 'vendedor']], function () {
+Route::group(['middleware' => ['auth:api', 'roles'],'roles' => ['administrador', 'vendedor']], function () {
     Route::delete('store-user/{user_id}/{store_id}', ['as' => 'store.user.destroy', 'uses' => 'StoreUserController@destroy']);
-    Route::get('store', ['as' => 'store.index', 'uses' => 'StoreController@index']);
     Route::resource('store-user', 'StoreUserController', ['except' => ['create', 'edit', 'destroy']]);
 });
 
 //TODO melhorar esse esquema de permissoes
 //Rotas que necessitam apenas estar autenticadas
-Route::group(['middleware' => ['jwt.auth']], function () {
+Route::group(['middleware' => ['auth:api']], function () {
     Route::put('user/{id}', ['as' => 'user.update', 'uses' => 'UserController@update']);
     Route::get('user/{id}', ['as' => 'user.show', 'uses' => 'UserController@show']);
     Route::get('user/', ['as' => 'user.index', 'uses' => 'UserController@index']);
     Route::post('auth/logout', ['as' => 'user.logout', 'uses' => 'AuthController@logout']);
+    Route::get('store', ['as' => 'store.index', 'uses' => 'StoreController@index']);
+    Route::get('store/{id}', ['as' => 'store.show', 'uses' => 'StoreController@show']);
 
 });
 

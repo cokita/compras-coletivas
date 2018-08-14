@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 use App\Constants\ConstProfile;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -63,18 +63,31 @@ class AuthController extends Controller
     }
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return response([
-                'status' => 'error',
-                'error' => 'invalid.credentials',
-                'msg' => 'Invalid Credentials.'
-            ], 400);
+        try {
+            $credentials = $request->only('email', 'password');
+
+            if (!Auth::attempt($credentials)) {
+                throw new \Exception("Usuário ou senha inválidos!", 401);
+            }
+
+            $user = $request->user();
+            $tokenResult = $user->createToken('Personal Access Token');
+            $token = $tokenResult->token;
+
+            if ($request->remember_me)
+                $token->expires_at = Carbon::now()->addWeeks(1);
+
+            $token->save();
+
+            return response()->json([
+                'access_token' => $tokenResult->accessToken,
+                'token_type' => 'Bearer',
+                'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString()
+            ]);
+        }catch (\Exception $e){
+            dd($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
-        return response([
-            'status' => 'success',
-            'token' => $token
-        ]);
     }
     public function user(Request $request)
     {
