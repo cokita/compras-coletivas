@@ -12,7 +12,7 @@ class OrderStatusTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('order_type')->delete();
+        DB::table('order_status')->delete();
 
         OrderStatus::create(['name' => 'Em preparação', 'description' => 'O pedido ainda não está aberto para compras, o vendedor está preparando o pedido.']);
         OrderStatus::create(['name' => 'Aberto', 'description' => 'Pedido liberado para venda.']);

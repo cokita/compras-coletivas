@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Constants;
+
+class ConstStatus {
+
+    CONST EM_PREPARACAO = 1;
+    CONST ABERTO = 2;
+    CONST AGUARDANDO_PAGAMENTO = 3;
+    CONST FECHAMENTO = 4;
+    CONST ENVIADO = 5;
+    CONST POSTADO = 6;
+    CONST ENTREGUE = 7;
+    CONST AGUARDANDO_RETIRADA = 8;
+    CONST FECHADO = 9;
+}

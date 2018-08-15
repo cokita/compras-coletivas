@@ -18,9 +18,9 @@ class CreateOrdersTable extends Migration
             $table->string('name', 255);
             $table->string('description', 2048)->nullable();
             $table->boolean('active')->default(true);
-            $table->unsignedInteger('store_id')->unique();
-            $table->unsignedInteger('order_type_id')->unique();
-            $table->unsignedInteger('order_history_id')->unique();
+            $table->unsignedInteger('store_id');
+            $table->unsignedInteger('order_type_id');
+            $table->unsignedInteger('order_history_id')->nullable();
             $table->timestamps();
 
             $table->foreign('store_id')->references('id')->on('stores');
@@ -40,6 +40,10 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
+        Schema::table('order_history', function($table) {
+            $table->dropForeign('order_history_order_id_foreign');
+        });
+
         Schema::dropIfExists('orders');
     }
 }

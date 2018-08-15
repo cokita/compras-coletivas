@@ -18,12 +18,17 @@ class Orders extends Model
 
     public function orderType()
     {
-        return $this->hasOne('App\Models\OrdersType');
+        return $this->hasOne('App\Models\OrderType');
     }
 
-    public function lastOrderHistory()
+    public function orderHistory()
     {
-        return $this->hasOne('App\Models\OrdersHistory');
+        return $this->hasOne('App\Models\OrderHistory', 'id', 'order_history_id');
+    }
+
+    public function histories()
+    {
+        return $this->hasMany('App\Models\OrderHistory', 'order_id', 'id');
     }
 }
 

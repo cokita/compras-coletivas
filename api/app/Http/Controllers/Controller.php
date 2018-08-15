@@ -15,10 +15,14 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     /** @var User|null Usuário autenticado */
-    protected $usuario;
+    protected $user;
+    protected $page;
+    protected $perPage;
 
     public function __construct()
     {
-        $this->usuario = Auth::user();
+        $this->user = Auth::user();
+        $this->perPage = 15;
+        $this->page = 1;
     }
 }

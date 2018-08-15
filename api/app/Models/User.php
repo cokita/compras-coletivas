@@ -41,6 +41,11 @@ class User extends Authenticatable
             'user_id', 'store_id')->withTimestamps();
     }
 
+    public function store()
+    {
+        return $this->hasOne(Stores::class, 'user_id','id');
+    }
+
     /**
      * Retorna se o usuario está em um perfil ou array de perfis
      *

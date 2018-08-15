@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Stores;
-use App\Models\User;
+use App\Models\OrderType;
 use Illuminate\Http\Request;
 use Validator;
 
-class StoreController extends Controller
+class OrderTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,38 +25,42 @@ class StoreController extends Controller
             $this->page = $data['page'];
         }
 
-        $stores = Stores::query();
+        $orderTypes = OrderType::query();
 
         if(!empty($data['with'])){
-            $stores->with($data['with']);
+            $orderTypes->with($data['with']);
         }
         if(!empty($data['id'])){
-            $stores->where('id', '=', $data['id']);
+            $orderTypes->where('id', '=', $data['id']);
         }
 
         if(!empty($data['name'])){
-            $stores->where('name','LIKE',"%{$data['name']}%");
+            $orderTypes->where('name','LIKE',"%{$data['name']}%");
         }
 
         if(!empty($data['active'])){
-            $stores->where('active','=', $data['active']);
-        }
-
-        if(!empty($data['user_id'])){
-            $stores->where('user_id','=', $data['user_id']);
+            $orderTypes->where('active','=', $data['active']);
         }
 
         if(!empty($data['description'])){
-            $stores->where('description','LIKE',"%{$data['description']}%");
+            $orderTypes->where('description','LIKE',"%{$data['description']}%");
         }
 
+        if(!empty($data['order_by'])){
+            $direction = 'asc';
+            if(!empty($data['order_by_direction'])){
+                $direction = $data['order_by_direction'];
+            }
+            $orderTypes->orderBy($data['orderBy'], $direction);
+        }
 
-        $stores = $stores->paginate($this->perPage, ['*'], 'page', $this->page);
+        $orderTypes = $orderTypes->paginate($this->perPage, ['*'], 'page', $this->page);
         return response([
             'status' => 'success',
-            'data' => $stores
+            'data' => $orderTypes
         ]);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -68,8 +71,9 @@ class StoreController extends Controller
     public function store(Request $request)
     {
         try {
+
             $validator = Validator::make($request->all(), [
-                'user_id' => 'required|unique:stores',
+                'description' => 'required',
                 'name' => 'required'
             ]);
 
@@ -77,24 +81,13 @@ class StoreController extends Controller
                 throw new \Exception($validator->getMessageBag(), 412);
             }
 
-            $user_id = $request->get('user_id');
-            $seller = User::find($user_id);
-
-            if(!$seller || $seller->active != 1)
-                throw new \Exception("Vendedor não encontrado!", 412);
-
-            $isSeller = $seller->hasProfile('vendedor');
-
-            if(!$isSeller)
-                throw new \Exception("O usuário informado não é um VENDEDOR, os grupos podem ser vinculados apenas a vendedores!", 412);
-
-            $store = new Stores();
-            $store->fill($request->all());
-            $store->save();
+            $orderType = new OrderType();
+            $orderType->fill($request->all());
+            $orderType->save();
 
             return response([
                 'status' => 'success',
-                'data' => $store
+                'data' => $orderType
             ]);
 
         }catch (\Exception $e){
@@ -113,13 +106,12 @@ class StoreController extends Controller
      */
     public function show($id)
     {
-        $store = Stores::find($id);
+        $orderType = OrderType::find($id);
         return response([
             'status' => 'success',
-            'data' => $store
+            'data' => $orderType
         ]);
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -131,30 +123,26 @@ class StoreController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $user_id = $request->get('user_id');
-            if($user_id){
-                $user_id = $request->get('user_id');
-                $seller = User::find($user_id);
+            $orderType = OrderType::query()->find($id);
 
-                if(!$seller || $seller->active != 1)
-                    throw new \Exception("Vendedor não encontrado!", 412);
+            if(!$orderType)
+                throw new \Exception("Nenhum tipo de pedido encontrado.", 412);
 
-                $isSeller = $seller->hasProfile('vendedor');
+            $validator = Validator::make($request->all(), [
+                'description' => 'required',
+                'name' => 'required'
+            ]);
 
-                if(!$isSeller)
-                    throw new \Exception("O usuário informado não é um VENDEDOR, os grupos podem ser vinculados apenas a vendedores!", 412);
+            if ($validator->fails()) {
+                throw new \Exception($validator->getMessageBag(), 412);
             }
 
-            $store = Stores::find($id);
-            if (!$store)
-                throw new \Exception("Grupo não encontrado!", 412);
-
-            $store->fill($request->all());
-            $store->save();
+            $orderType->fill($request->all());
+            $orderType->save();
 
             return response([
                 'status' => 'success',
-                'data' => $store
+                'data' => $orderType
             ]);
 
         }catch (\Exception $e){
@@ -174,16 +162,17 @@ class StoreController extends Controller
     public function destroy($id)
     {
         try {
-            $store = Stores::find($id);
-            if (!$store)
-                throw new \Exception("Grupo não encontrado!", 412);
+            $orderType = OrderType::query()->find($id);
 
-            $store->active = 0;
-            $store->save();
+            if(!$orderType)
+                throw new \Exception("Nenhum tipo de pedido encontrado.", 412);
+
+            $orderType->active = 0;
+            $orderType->save();
 
             return response([
                 'status' => 'success',
-                'data' => $store
+                'data' => $orderType
             ]);
 
         }catch (\Exception $e){

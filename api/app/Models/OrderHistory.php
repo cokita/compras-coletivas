@@ -11,9 +11,9 @@ class OrderHistory extends Model
         'id', 'observation', 'status_limit_date', 'active', 'tracking_code', 'order_id', 'orders_status_id'
     ];
 
-    public function orders()
+    public function order()
     {
-        return $this->hasMany('App\Models\Orders', 'id', 'order_id');
+        return $this->belongsTo('App\Models\Orders');
     }
 
     public function status()

@@ -13,7 +13,7 @@ class Stores extends Model
 
     public function user()
     {
-        return $this->hasOne('App\Models\Users');
+        return $this->belongsTo('App\Models\Users', 'id', 'user_id');
     }
 
     public function users()

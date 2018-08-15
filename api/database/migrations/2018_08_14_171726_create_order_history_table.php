@@ -17,7 +17,7 @@ class CreateOrderHistoryTable extends Migration
             $table->increments('id');
             $table->string('observation', 2048)->nullable();
             $table->boolean('active')->default(true);
-            $table->dateTime('status_limit_date');
+            $table->dateTime('status_limit_date')->nullable();
             $table->string('tracking_code', 1024)->nullable();
             $table->unsignedInteger('order_id')->unique();
             $table->unsignedInteger('order_status_id')->unique();
