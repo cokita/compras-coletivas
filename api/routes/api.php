@@ -39,17 +39,15 @@ Route::group(['middleware' => ['auth:api', 'roles'],'roles' => ['administrador',
 
 });
 
-//TODO melhorar esse esquema de permissoes
+
 //Rotas que necessitam apenas estar autenticadas
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::resource('order-type', 'OrderTypeController', ['only' => ['show', 'index']]);
-    Route::put('user/{id}', ['as' => 'user.update', 'uses' => 'UserController@update']);
-    Route::get('user/{id}', ['as' => 'user.show', 'uses' => 'UserController@show']);
-    Route::get('user/', ['as' => 'user.index', 'uses' => 'UserController@index']);
     Route::post('auth/logout', ['as' => 'user.logout', 'uses' => 'AuthController@logout']);
-    Route::get('store', ['as' => 'store.index', 'uses' => 'StoreController@index']);
-    Route::get('store/{id}', ['as' => 'store.show', 'uses' => 'StoreController@show']);
-    Route::resource('orders', 'OrdersController', ['except' => ['create', 'edit', 'destroy', 'store', 'update']]);
+    Route::resource('order-type', 'OrderTypeController', ['only' => ['show', 'index']]);
+    Route::resource('user', 'UserController', ['only' => ['show', 'index', 'update']]);
+    Route::resource('store', 'StoreController', ['only' => ['show', 'index']]);
+    Route::resource('orders', 'OrdersController', ['only' => ['show', 'index']]);
+    Route::resource('order-catalog', 'OrderCatalogController');
 
 });
 

@@ -46,6 +46,11 @@ class User extends Authenticatable
         return $this->hasOne(Stores::class, 'user_id','id');
     }
 
+    public function ordersCatalog()
+    {
+        return $this->hasMany(OrderCatalog::class, 'user_id', 'id');
+    }
+
     /**
      * Retorna se o usuario está em um perfil ou array de perfis
      *

@@ -30,5 +30,11 @@ class Orders extends Model
     {
         return $this->hasMany('App\Models\OrderHistory', 'order_id', 'id');
     }
+
+    public function ordersCatalog()
+    {
+        return $this->hasMany(OrderCatalog::class, 'order_id', 'id');
+    }
+
 }
 

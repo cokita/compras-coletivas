@@ -165,6 +165,24 @@ class OrdersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+
+            $order = Orders::find($id);
+            if($order){
+                $order->active = 0;
+                $order->save();
+            }
+
+            return response([
+                'status' => 'success',
+                'data' => $order
+            ]);
+
+        }catch (\Exception $e){
+            return response([
+                'status' => 'error',
+                'data' => $e->getMessage()
+            ], $e->getCode());
+        }
     }
 }
