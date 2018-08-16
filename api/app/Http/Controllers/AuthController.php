@@ -58,7 +58,7 @@ class AuthController extends Controller
             ], 200);
         }catch (\Exception $e){
             DB::rollBack();
-            return response(['status' => 'error', 'data' => $e->getMessage(), 'code' => $e->getCode()]);
+            return response(['status' => 'error', 'data' => $e->getMessage(), 'code' => $e->getCode() ? $e->getCode() : 400]);
         }
     }
     public function login(Request $request)
@@ -86,7 +86,7 @@ class AuthController extends Controller
             ]);
         }catch (\Exception $e){
             dd($e->getMessage());
-            return response()->json(['message' => $e->getMessage()], $e->getCode());
+            return response()->json(['message' => $e->getMessage()], $e->getCode() ? $e->getCode() : 400);
         }
     }
     public function user(Request $request)

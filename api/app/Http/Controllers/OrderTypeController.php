@@ -179,7 +179,7 @@ class OrderTypeController extends Controller
             return response([
                 'status' => 'error',
                 'data' => $e->getMessage()
-            ], $e->getCode());
+            ], $e->getCode() ? $e->getCode() : 400);
         }
     }
 }

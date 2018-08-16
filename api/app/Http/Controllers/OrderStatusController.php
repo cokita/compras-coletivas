@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\ConstStatus;
-use App\Models\OrderHistory;
-use App\Models\Orders;
-use App\Models\Stores;
+use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 use Validator;
-use Illuminate\Support\Facades\Auth;
 
-class OrdersController extends Controller
+class OrderStatusController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -30,37 +25,25 @@ class OrdersController extends Controller
             $this->page = $data['page'];
         }
 
-        $orders = Orders::query();
+        $orderStatus = OrderStatus::query();
 
         if(!empty($data['with'])){
-            $orders->with($data['with']);
+            $orderStatus->with($data['with']);
         }
         if(!empty($data['id'])){
-            $orders->where('id', '=', $data['id']);
+            $orderStatus->where('id', '=', $data['id']);
         }
 
         if(!empty($data['name'])){
-            $orders->where('name','LIKE',"%{$data['name']}%");
+            $orderStatus->where('name','LIKE',"%{$data['name']}%");
         }
 
         if(!empty($data['active'])){
-            $orders->where('active','=', $data['active']);
-        }
-
-        if(!empty($data['store_id'])){
-            $orders->where('store_id','=', $data['store_id']);
-        }
-
-        if(!empty($data['order_type_id'])){
-            $orders->where('order_type_id','=', $data['order_type_id']);
-        }
-
-        if(!empty($data['order_history_id'])){
-            $orders->where('order_history_id','=', $data['order_history_id']);
+            $orderStatus->where('active','=', $data['active']);
         }
 
         if(!empty($data['description'])){
-            $orders->where('description','LIKE',"%{$data['description']}%");
+            $orderStatus->where('description','LIKE',"%{$data['description']}%");
         }
 
         if(!empty($data['order_by'])){
@@ -68,13 +51,13 @@ class OrdersController extends Controller
             if(!empty($data['order_by_direction'])){
                 $direction = $data['order_by_direction'];
             }
-            $orders->orderBy($data['orderBy'], $direction);
+            $orderStatus->orderBy($data['orderBy'], $direction);
         }
 
-        $orders = $orders->paginate($this->perPage, ['*'], 'page', $this->page);
+        $orderStatus = $orderStatus->paginate($this->perPage, ['*'], 'page', $this->page);
         return response([
             'status' => 'success',
-            'data' => $orders
+            'data' => $orderStatus
         ]);
     }
 
@@ -87,8 +70,9 @@ class OrdersController extends Controller
     public function store(Request $request)
     {
         try {
+
             $validator = Validator::make($request->all(), [
-                'order_type_id' => 'required',
+                'description' => 'required',
                 'name' => 'required'
             ]);
 
@@ -96,30 +80,13 @@ class OrdersController extends Controller
                 throw new \Exception($validator->getMessageBag(), 412);
             }
 
-            $user = Auth::user();
-            if(!$user->store)
-                throw new \Exception("Nenhum grupo encontrada para esse usuário.");
-
-            $store = Stores::find($user->store->id);
-
-            if(!$store || $store->active != 1)
-                throw new \Exception("Grupo vinculado ao vendedor não encontrado!", 412);
-
-            $order = new Orders();
-            $order->fill($request->all());
-            $order->store_id = $store->id;
-            $order->save();
-            $orderHistory = new OrderHistory();
-            $orderHistory->order_status_id = ConstStatus::EM_PREPARACAO;
-            $orderHistory->observation = "Pedido em preparação.";
-            $orderHistory->order()->associate($order)->save();
-
-            $order->order_history_id = $orderHistory->id;
-            $order->save();
+            $orderStatus = new OrderStatus();
+            $orderStatus->fill($request->all());
+            $orderStatus->save();
 
             return response([
                 'status' => 'success',
-                'data' => $store
+                'data' => $orderStatus
             ]);
 
         }catch (\Exception $e){
@@ -138,10 +105,10 @@ class OrdersController extends Controller
      */
     public function show($id)
     {
-        $orders = Orders::find($id);
+        $orderStatus = OrderStatus::find($id);
         return response([
             'status' => 'success',
-            'data' => $orders
+            'data' => $orderStatus
         ]);
     }
 
@@ -166,16 +133,17 @@ class OrdersController extends Controller
     public function destroy($id)
     {
         try {
+            $orderStatus = OrderStatus::query()->find($id);
 
-            $order = Orders::find($id);
-            if($order){
-                $order->active = 0;
-                $order->save();
-            }
+            if(!$orderStatus)
+                throw new \Exception("Nenhum status encontrado.", 412);
+
+            $orderStatus->active = 0;
+            $orderStatus->save();
 
             return response([
                 'status' => 'success',
-                'data' => $order
+                'data' => $orderStatus
             ]);
 
         }catch (\Exception $e){

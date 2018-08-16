@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\ConstStatus;
 use App\Models\OrderCatalog;
 use App\Models\Orders;
+use App\Services\UserService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\Auth;
@@ -103,6 +106,15 @@ class OrderCatalogController extends Controller
             if(!$order || $order->active != 1)
                 throw new \Exception("Pedido não encontrado!", 412);
 
+            $userService = new UserService($user);
+            if(!$userService->userInStore($order->id))
+                throw new \Exception("Esse usuário não pertence a esse grupo.");
+
+            if(!in_array($order->orderHistory->order_status_id, ConstStatus::ARR_CAN_ORDER) ||
+                (in_array($order->orderHistory->order_status_id, ConstStatus::ARR_CAN_ORDER) &&
+                $order->orderHistory->status_limit_date > Carbon::now()))
+                throw new \Exception("Esse pedido não está aberto para adição de novos itens.");
+
             $orderCatalog = new OrderCatalog();
             $orderCatalog->fill($request->all());
             $orderCatalog->order_id = $order->id;
@@ -118,7 +130,7 @@ class OrderCatalogController extends Controller
             return response([
                 'status' => 'error',
                 'data' => $e->getMessage()
-            ], $e->getCode());
+            ], $e->getCode() ? $e->getCode() : 400);
         }
     }
 
@@ -164,7 +176,7 @@ class OrderCatalogController extends Controller
             return response([
                 'status' => 'error',
                 'data' => $e->getMessage()
-            ], $e->getCode());
+            ], $e->getCode() ? $e->getCode() : 400);
         }
     }
 
@@ -194,7 +206,7 @@ class OrderCatalogController extends Controller
             return response([
                 'status' => 'error',
                 'data' => $e->getMessage()
-            ], $e->getCode());
+            ], $e->getCode() ? $e->getCode() : 400);
         }
     }
 }
