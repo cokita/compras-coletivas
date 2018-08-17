@@ -13,7 +13,7 @@
 							
 							<div [formGroup]="registerForm">
 								<mat-form-field class="full-width">
-									<input matInput placeholder="Nome Completo" formControlName="nome" name="nome" required>
+									<input matInput placeholder="Nome Completo" formControlName="name" name="name" required>
 									<mat-error *ngIf="validateFormControl.hasError('required')">
 										Nome é <strong>obrigatório</strong>
 									</mat-error>
@@ -31,7 +31,7 @@
 
 							<div [formGroup]="registerForm">
 								<mat-form-field class="full-width">
-									<input matInput placeholder="Telefone" formControlName="telefone" type="tel" name="telefone" required>
+									<input matInput placeholder="Telefone" formControlName="cellphone" type="tel" name="cellphone" required>
 									<mat-error *ngIf="validateFormControl.hasError('required')">
 										Telefone é <strong>obrigatório</strong>
 									</mat-error>
