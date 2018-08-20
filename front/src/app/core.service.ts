@@ -26,17 +26,17 @@ export class CoreService {
         this.options = { headers: headers, params: {} };
     }
 
-    public create(data): Observable<any> {
+    public post(url, data): Observable<any> {
         return this.http
-            .post(this.GC.API_ENDPOINT, data, this.options);
+            .post(`${this.GC.API_ENDPOINT}/${url}`, data, this.options);
     }
 
-    public remove(id): Observable<any> {
+    public remove(url): Observable<any> {
         return this.http
-            .delete(`${this.GC.API_ENDPOINT}/${id}`, this.options);
+            .delete(`${this.GC.API_ENDPOINT}/${url}`, this.options);
     }
 
-    public get(id, object?): Observable<any> {
+    public get(url, object?): Observable<any> {
         if(object) {
             this.options['params'] = new HttpParams({
                 fromObject: object
@@ -44,14 +44,14 @@ export class CoreService {
         }
 
         return this.http
-            .get(`${this.GC.API_ENDPOINT}/${id}`, this.options);
+            .get(`${this.GC.API_ENDPOINT}/${url}`, this.options);
     }
 
-    public update(id, object): Observable<any> {
+    public update(url, object): Observable<any> {
         this.options['params'] = new HttpParams({
             fromObject: object
         });
         return this.http
-            .put(`${this.GC.API_ENDPOINT}/${id}`, this.options);
+            .put(`${this.GC.API_ENDPOINT}/${url}`, this.options);
     }
 }

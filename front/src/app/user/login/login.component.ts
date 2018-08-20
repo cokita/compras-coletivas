@@ -1,7 +1,7 @@
-import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 
-import { CoreService } from "../../core.service";
+import { LoginService} from "./login.service";
 
 @Component({
     selector: 'app-login',
@@ -11,7 +11,7 @@ import { CoreService } from "../../core.service";
 })
 export class LoginComponent implements OnInit {
 
-    registerForm: FormGroup;
+    loginForm: FormGroup;
     result: string;
 
     validateFormControl = new FormControl('', [
@@ -20,22 +20,34 @@ export class LoginComponent implements OnInit {
     ]);
 
 
-    constructor(private formBuilder: FormBuilder, private coreService: CoreService) {
+    constructor(private formBuilder: FormBuilder, private loginService: LoginService) {
     }
 
     ngOnInit() {
-        this.coreService.get('user/1').subscribe(function(restult){
-           console.log(restult);
-        });
-
-        this.registerForm = this.formBuilder.group({
-            username: ['', Validators.required],
+        this.loginForm = this.formBuilder.group({
+            email: ['', Validators.required],
             password: ['', Validators.required]
         });
+
+        this.loginService.logout();
     }
 
+    get f() { return this.loginForm.controls; }
+
     login() {
-        console.log(this.registerForm.controls);
+        console.log(this.f.email.value, this.f.password.value);
+
+        this.loginService.login(this.f.email.value, this.f.password.value).add(result => {
+            console.log(result);
+        })
+            // .subscribe(
+            //     data => {
+            //         this.router.navigate([this.returnUrl]);
+            //     },
+            //     error => {
+            //         this.alertService.error(error);
+            //         this.loading = false;
+            //     });
     }
 
 }

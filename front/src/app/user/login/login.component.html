@@ -8,26 +8,26 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="full-width">
-          <form #myForm="ngForm" class="example-form" ngNativeValidate (ngSubmit)="login()">
+          <form [formGroup]="loginForm" class="example-form" ngNativeValidate (ngSubmit)="login()">
 
-            <div [formGroup]="registerForm">
+            <div>
               <mat-form-field class="full-width">
-                <input matInput placeholder="Nome de Usuário" formControlName="username" name="username" required>
+                <input matInput placeholder="E-mail" formControlName="email" name="email" required>
                 <mat-error *ngIf="validateFormControl.hasError('required')">
-                  Nome de Usuário é <strong>obrigatório</strong>
+                  E-mail é <strong>obrigatório</strong>
                 </mat-error>
               </mat-form-field>
             </div>
-            <div [formGroup]="registerForm">
+            <div>
               <mat-form-field class="full-width">
-                <input matInput placeholder="Senha" formControlName="password" name="password" required>
+                <input matInput type="password" placeholder="Senha" formControlName="password" name="password" required>
                 <mat-error *ngIf="validateFormControl.hasError('required')">
                   Senha é <strong>obrigatória</strong>
                 </mat-error>
               </mat-form-field>
             </div>
             <mat-card-actions fxLayout="column" fxLayoutAlign="center center">
-              <button mat-raised-button color="primary" type="submit" [disabled]="!myForm.form.valid">Cadastrar</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">ENTRAR</button>
             </mat-card-actions>
           </form>
           <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
