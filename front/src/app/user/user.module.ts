@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule ,ReactiveFormsModule } from '@angular/forms';
 import { MaterialSharedModule } from '../material-shared/material-shared.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { SharedModule } from "../shared/shared.module";
 
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
@@ -12,9 +13,9 @@ import { LoginService } from './login/login.service';
 
 @NgModule({
   imports: [
-    CommonModule,MaterialSharedModule,FormsModule ,ReactiveFormsModule,FlexLayoutModule
+    CommonModule,MaterialSharedModule,FormsModule ,ReactiveFormsModule,FlexLayoutModule,SharedModule
   ],
-  declarations: [LoginComponent,UserComponent, RegisterComponent],
-  providers: [ LoginService]
+  declarations: [LoginComponent,UserComponent, RegisterComponent ],
+  providers: [ LoginService ]
 })
 export class UserModule { }

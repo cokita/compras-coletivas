@@ -3,15 +3,23 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from "./user/login/login.component";
 import { UserComponent } from "./user/user.component";
 import { RegisterComponent } from "./user/register/register.component";
-import { HomeComponent } from "./home/home.component";
+import { LayoutComponent } from "./layout/layout.component";
 import { UserGuard } from './user/user.guard';
+import {HomeComponent} from "./home/home.component";
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
+    {
+        path: '',
+        component: LayoutComponent,
+        children: [
+            { path: '', redirectTo: 'home', pathMatch: 'full' },
+            { path: 'home', component: HomeComponent },
+        ]
+    },
 
-    { path: '', component: HomeComponent, canActivate: [UserGuard] },
-    { path: 'user', component: UserComponent, canActivate: [UserGuard] },
+
 
     { path: '**', redirectTo: '' }
 ];
