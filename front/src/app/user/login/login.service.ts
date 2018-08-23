@@ -27,5 +27,13 @@ export class LoginService {
 
     logout() {
         localStorage.removeItem('currentUser');
+        this.router.navigate(['/login']);
+    }
+
+    getUser(){
+        let all =JSON.parse(localStorage.getItem('currentUser'));
+        if(all.user){
+            return all.user;
+        }
     }
 }

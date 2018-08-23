@@ -6,15 +6,21 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SpinnerComponent } from "./spinner/spinner.component";
 import { MenuItems } from "./menu-items/menu-items";
 
+import {RouterModule} from "@angular/router";
+
 
 @NgModule({
   imports: [
     CommonModule,
     FlexLayoutModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    RouterModule
   ],
   declarations: [SpinnerComponent],
   providers: [MenuItems],
-  exports:[SpinnerComponent, FlexLayoutModule, FontAwesomeModule]
+  exports:[SpinnerComponent,
+      FlexLayoutModule,
+      FontAwesomeModule,
+      RouterModule]
 })
 export class SharedModule { }

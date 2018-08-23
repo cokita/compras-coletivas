@@ -1,10 +1,7 @@
-import * as $ from 'jquery';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { Router } from '@angular/router';
-import { ChangeDetectorRef, Component, NgZone, OnDestroy, ViewChild, HostListener, Directive, AfterViewInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { MenuItems} from "../shared/menu-items/menu-items";
-import { HeaderComponent } from './header/header.component';
-import { SidebarComponent} from "./sidebar/sidebar.component";
+import { LoginService } from "../user/login/login.service";
 
 /** @title Responsive sidenav */
 @Component({
@@ -17,7 +14,7 @@ export class LayoutComponent implements OnDestroy, AfterViewInit {
 
     private _mobileQueryListener: () => void;
 
-    constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, public menuItems: MenuItems) {
+    constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, public menuItems: MenuItems, public loginService: LoginService) {
         this.mobileQuery = media.matchMedia('(min-width: 768px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
         this.mobileQuery.addListener(this._mobileQueryListener);
