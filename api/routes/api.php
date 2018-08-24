@@ -35,7 +35,7 @@ Route::group(['middleware' => ['auth:api', 'roles'],'roles' => ['administrador',
     Route::delete('store-user/{user_id}/{store_id}', ['as' => 'store.user.destroy', 'uses' => 'StoreUserController@destroy']);
     Route::resource('store-user', 'StoreUserController', ['only' => ['update', 'store']]);
     Route::resource('order-type', 'OrderTypeController', ['only' => ['update', 'store', 'destroy']]);
-    Route::resource('orders', 'OrdersController', ['only' => ['update', 'store', 'destroy']]);
+    Route::resource('orders', 'OrdersController', ['only' => ['update', 'store', 'destroy', 'index']]);
 
 });
 
@@ -46,8 +46,12 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('order-type', 'OrderTypeController', ['only' => ['show', 'index']]);
     Route::resource('user', 'UserController', ['only' => ['show', 'index', 'update']]);
     Route::resource('store', 'StoreController', ['only' => ['show', 'index']]);
-    Route::resource('orders', 'OrdersController', ['only' => ['show', 'index']]);
     Route::resource('order-catalog', 'OrderCatalogController');
+
+    Route::group(['prefix' => 'orders'], function () {
+        Route::get('/{id}', ['as' => 'orders.show', 'uses' => 'OrdersController@show']);
+        Route::get('/my-groups/', ['as' => 'orders.my-groups', 'uses' => 'OrdersController@myGroups']);
+    });
 
 });
 

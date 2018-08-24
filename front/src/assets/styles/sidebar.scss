@@ -118,8 +118,8 @@ use profile section
             animation: 2.5s blow 0s linear infinite;
             position: absolute;
             content: '';
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             top: 31px;
             margin: 0 auto;
             border-radius: 50%;
@@ -178,7 +178,7 @@ use profile section
         > a {
             color: $white!important;
             width: 100%;
-            padding: 6px 30px;
+            padding: 3px 30px;
             background: rgba(0, 0, 0, 0.5);
             display: block;
             white-space: nowrap;

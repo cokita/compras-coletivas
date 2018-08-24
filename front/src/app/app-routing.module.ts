@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from "./user/login/login.component";
-import { UserComponent } from "./user/user.component";
 import { RegisterComponent } from "./user/register/register.component";
 import { LayoutComponent } from "./layout/layout.component";
 import { UserGuard } from './user/user.guard';
-import {HomeComponent} from "./home/home.component";
+import { HomeComponent } from "./home/home.component";
+import { GroupsComponent } from "./groups/groups.component";
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -16,6 +16,7 @@ const routes: Routes = [
         children: [
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
+            { path: 'groups', component: GroupsComponent },
         ],
         canActivate: [UserGuard]
     },

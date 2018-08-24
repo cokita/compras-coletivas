@@ -23,6 +23,7 @@ import { MaskDirective } from './mask/mask.directive';
 import { HomeComponent } from './home/home.component';
 import { UserGuard } from './user/user.guard';
 import { LoginService } from './user/login/login.service';
+import { GroupsComponent } from './groups/groups.component';
 
 library.add(faCoffee, fas, far);
 
@@ -30,7 +31,8 @@ library.add(faCoffee, fas, far);
     declarations: [
         AppComponent,
         MaskDirective,
-        HomeComponent
+        HomeComponent,
+        GroupsComponent
     ],
     imports: [
         RouterModule,

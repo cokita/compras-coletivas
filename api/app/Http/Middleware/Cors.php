@@ -18,7 +18,7 @@ class Cors{
             // Depending of your application you can't use '*'
             // Some security CORS concerns
             ->header('Access-Control-Allow-Origin', '*')
-            ->header('Access-Control-Allow-Methods', 'POST, OPTIONS,GET,DELETE,PUT')
+            ->header('Access-Control-Allow-Methods', 'POST,OPTIONS,GET,DELETE,PUT')
             ->header('Access-Control-Allow-Credentials', 'true')
             ->header('Access-Control-Max-Age', '10000')
             ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');

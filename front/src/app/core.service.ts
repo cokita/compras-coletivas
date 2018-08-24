@@ -12,23 +12,32 @@ import {ConstantsGlobalService} from "./constants/constants-global.service";
   providedIn: 'root'
 })
 export class CoreService {
-    public headers: HttpHeaders;
     public options: Object;
     public GC: ConstantsGlobalService;
 
     constructor(protected http: HttpClient,
                 protected router: Router) {
-
         this.GC = new ConstantsGlobalService();
-        let headers = new HttpHeaders();
-        headers = headers.append('Content-Type', 'application/json');
+    }
 
-        this.options = { headers: headers, params: {} };
+    private setParamsOptions(object){
+        this.options['params'] = new HttpParams({
+            fromObject: object
+        });
+    }
+
+    private getOptions(){
+        let headers = new HttpHeaders({'Content-Type': 'application/json'});
+        if(this.getToken()){
+            headers = headers.set('Authorization', 'Bearer '+this.getToken());
+        }
+
+        return this.options = { headers: headers, params: {} };
     }
 
     public post(url, data): Observable<any> {
         return this.http
-            .post(`${this.GC.API_ENDPOINT}/${url}`, data, this.options);
+            .post(`${this.GC.API_ENDPOINT}/${url}`, data, this.getOptions());
     }
 
     public remove(url): Observable<any> {
@@ -37,10 +46,9 @@ export class CoreService {
     }
 
     public get(url, object?): Observable<any> {
+        this.getOptions();
         if(object) {
-            this.options['params'] = new HttpParams({
-                fromObject: object
-            });
+            this.setParamsOptions(object);
         }
 
         return this.http
@@ -48,10 +56,17 @@ export class CoreService {
     }
 
     public update(url, object): Observable<any> {
-        this.options['params'] = new HttpParams({
-            fromObject: object
-        });
+        this.getOptions();
+        this.setParamsOptions(object);
+
         return this.http
             .put(`${this.GC.API_ENDPOINT}/${url}`, this.options);
+    }
+
+    public getToken(){
+        let all =JSON.parse(localStorage.getItem('currentUser'));
+        if(all && all.access_token){
+            return all.access_token;
+        }
     }
 }

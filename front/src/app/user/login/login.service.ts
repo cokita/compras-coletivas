@@ -16,7 +16,6 @@ export class LoginService {
     login(email: string, password: string) {
         return this.coreService.post(`/login`, { email: email, password: password })
             .subscribe(result => {
-                console.log(result);
                 if (result && result.user && result.access_token) {
                     localStorage.setItem('currentUser', JSON.stringify(result));
                 }
@@ -34,6 +33,13 @@ export class LoginService {
         let all =JSON.parse(localStorage.getItem('currentUser'));
         if(all.user){
             return all.user;
+        }
+    }
+
+    getToken(){
+        let all =JSON.parse(localStorage.getItem('currentUser'));
+        if(all.token){
+            return all.token;
         }
     }
 }
