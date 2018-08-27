@@ -185,32 +185,4 @@ class OrdersController extends Controller
             ], $e->getCode() ? $e->getCode() : 400);
         }
     }
-
-    public function myGroups()
-    {
-        try {
-            $user = Auth::user();
-
-            $groups = Stores::query()
-                ->select(['stores.name as group', 'stores.description as group_description',
-                          'own.name as owner', 'own.email as owners_email', 'own.cellphone as owners_cellphone'])
-                ->join('users as own', 'own.id', '=', 'stores.user_id')
-                ->join('stores_users', 'stores_users.store_id', '=', 'stores.id')
-                ->join('users', 'users.id', '=', 'stores_users.user_id')
-                ->where('stores.active', '=', 1)
-                ->where('users.id', '=', $user->id)
-                ->get();
-
-            return response([
-                'status' => 'success',
-                'data' => $groups
-            ]);
-
-        }catch (\Exception $e){
-            return response([
-                'status' => 'error',
-                'data' => $e->getMessage()
-            ], $e->getCode() ? $e->getCode() : 400);
-        }
-    }
 }

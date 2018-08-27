@@ -1,3 +1,30 @@
-<p>
-  groups works!
-</p>
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <span>Third Line</span>
+        <span class="example-spacer"></span>
+        <mat-icon class="example-icon">favorite</mat-icon>
+        <mat-icon class="example-icon">delete</mat-icon>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-grid-list cols="3" *ngIf="myGroups">
+    <mat-grid-tile *ngFor="let item of myGroups">
+        <div>
+            <mat-card class="example-card">
+                <mat-card-header>
+                    <div mat-card-avatar class="example-header-image"></div>
+                    <mat-card-title>{{item.group}}</mat-card-title>
+                    <mat-card-subtitle>Responsável: {{item.owner}}</mat-card-subtitle>
+                </mat-card-header>
+                <!--<img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">-->
+                <mat-card-content>
+                    <p>{{item.group_description}}</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button color="primary">ENTRAR</button>
+                    <button mat-button color="warn">SAIR</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>

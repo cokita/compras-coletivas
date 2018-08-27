@@ -13,11 +13,11 @@ class StoresUsers extends Model
 
     public function users()
     {
-        return $this->hasMany('App\Models\Users');
+        return $this->hasMany(User::class);
     }
 
     public function stores()
     {
-        return $this->hasMany('App\Models\Stores');
+        return $this->hasMany(Stores::class);
     }
 }

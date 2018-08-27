@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stores;
+use App\Models\StoresUsers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Support\Facades\Auth;
 
 class StoreController extends Controller
 {
@@ -184,6 +186,40 @@ class StoreController extends Controller
             return response([
                 'status' => 'success',
                 'data' => $store
+            ]);
+
+        }catch (\Exception $e){
+            return response([
+                'status' => 'error',
+                'data' => $e->getMessage()
+            ], $e->getCode() ? $e->getCode() : 400);
+        }
+    }
+
+    public function myStores()
+    {
+        try {
+            $user = Auth::user();
+            $groups = Stores::query()
+                ->select(['stores.name as group', 'stores.description as group_description', 'images.path as image_url',
+                    'own.name as owner', 'own.email as owners_email', 'own.cellphone as owners_cellphone'])
+                ->join('users as own', 'own.id', '=', 'stores.user_id')
+                ->join('stores_users', 'stores_users.store_id', '=', 'stores.id')
+                ->join('users', 'users.id', '=', 'stores_users.user_id')
+                ->leftJoin('images', 'images.id', '=', 'stores.image_id')
+                ->where('stores.active', '=', 1)
+                ->where('users.id', '=', $user->id)
+                ->get();
+
+//            $userId = $user->id;
+//            $groups = Stores::query()->with(['user','image', 'users' => function ($q) use ($userId) {
+//                $q->where('user_id', $userId);
+//            }])->get();
+
+
+            return response([
+                'status' => 'success',
+                'data' => $groups
             ]);
 
         }catch (\Exception $e){

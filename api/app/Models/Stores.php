@@ -13,12 +13,17 @@ class Stores extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\Models\Users', 'id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function users()
     {
-        return $this->belongsToMany('App\Models\Users', 'stores_users',
+        return $this->belongsToMany(User::class, 'stores_users',
             'store_id', 'user_id')->withTimestamps();
+    }
+
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'id', 'image_id');
     }
 }

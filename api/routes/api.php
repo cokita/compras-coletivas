@@ -50,7 +50,15 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::group(['prefix' => 'orders'], function () {
         Route::get('/{id}', ['as' => 'orders.show', 'uses' => 'OrdersController@show']);
-        Route::get('/my-groups/', ['as' => 'orders.my-groups', 'uses' => 'OrdersController@myGroups']);
+        Route::group(['prefix' => 'my'], function () {
+//            Route::get('/list', ['as' => 'orders.my-groups', 'uses' => 'OrdersController@myGroups']);
+        });
+    });
+
+    Route::group(['prefix' => 'store'], function () {
+        Route::group(['prefix' => 'my'], function () {
+            Route::get('/list', ['as' => 'orders.my.list', 'uses' => 'StoreController@myStores']);
+        });
     });
 
 });
