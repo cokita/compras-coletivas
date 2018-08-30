@@ -24,6 +24,11 @@ class Stores extends Model
 
     public function image()
     {
-        return $this->hasOne(Image::class, 'id', 'image_id');
+        return $this->hasOne(Files::class, 'id', 'image_id');
+    }
+
+    public function file()
+    {
+        return $this->hasOne(Files::class, 'id', 'file_id');
     }
 }

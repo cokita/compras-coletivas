@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddImageIdToStore extends Migration
+class AddFileToStore extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,9 @@ class AddImageIdToStore extends Migration
     public function up()
     {
         Schema::table('stores', function($table) {
-            $table->unsignedInteger('image_id')->nullable();
+            $table->unsignedInteger('file_id')->nullable();
 
-            $table->foreign('image_id')->references('id')->on('images');
+            $table->foreign('file_id')->references('id')->on('files');
         });
     }
 
@@ -27,6 +27,8 @@ class AddImageIdToStore extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('stores', function (Blueprint $table) {
+            $table->dropColumn('file_id');
+        });
     }
 }

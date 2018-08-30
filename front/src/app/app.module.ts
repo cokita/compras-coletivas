@@ -24,6 +24,8 @@ import { HomeComponent } from './home/home.component';
 import { UserGuard } from './user/user.guard';
 import { LoginService } from './user/login/login.service';
 import { GroupsComponent } from './groups/groups.component';
+import { GroupDetailComponent } from './groups/group-detail/group-detail.component';
+import { GroupSettingsComponent } from './groups/group-settings/group-settings.component';
 
 library.add(faCoffee, fas, far);
 
@@ -32,7 +34,9 @@ library.add(faCoffee, fas, far);
         AppComponent,
         MaskDirective,
         HomeComponent,
-        GroupsComponent
+        GroupsComponent,
+        GroupDetailComponent,
+        GroupSettingsComponent
     ],
     imports: [
         RouterModule,

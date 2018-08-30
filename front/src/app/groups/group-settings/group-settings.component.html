@@ -1,0 +1,41 @@
+<div fxLayout="column" fxLayoutGap="20px">
+    <div>
+        <mat-toolbar color="basic">
+            <mat-toolbar-row>
+                <span>Grupo XXX - CONFIGURAÇÃO</span>
+                <span class="mattoolbar-spacer"></span>
+                <a [routerLink]="['/','group-settings']">
+                    <mat-icon class="mattoolbar-icon">settings</mat-icon>
+                </a>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+    <div>
+        <mat-card>
+            <mat-card-content class="full-width">
+                <form [formGroup]="groupSettingsForm" class="example-form" ngNativeValidate (ngSubmit)="login()">
+                    <div fxLayoutAlign="center">
+                        <mat-card>
+                            <mat-icon class="fs-120 color-grey-500">add_a_photo</mat-icon>
+                        </mat-card>
+                    </div>
+                    <div>
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Nome do grupo de vendas" formControlName="name" name="name" required>
+                            <mat-error *ngIf="validateFormControl.hasError('required')">
+                                O nome do grupo é <strong>obrigatório</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field class="full-width">
+                            <textarea matInput placeholder="Insira aqui uma descrição para o seu grupo." rows="5"></textarea>
+                        </mat-form-field>
+
+                    </div>
+                </form>
+            </mat-card-content>
+
+        </mat-card>
+    </div>
+</div>
