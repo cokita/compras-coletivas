@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::resource('user', 'UserController', ['only' => ['show', 'index', 'update']]);
     Route::resource('store', 'StoreController', ['only' => ['show', 'index']]);
     Route::resource('order-catalog', 'OrderCatalogController');
+    Route::resource('file', 'FileController', ['only' => ['show', 'index']]);
 
     Route::group(['prefix' => 'orders'], function () {
         Route::get('/{id}', ['as' => 'orders.show', 'uses' => 'OrdersController@show']);
@@ -57,8 +58,11 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::group(['prefix' => 'store'], function () {
         Route::group(['prefix' => 'my'], function () {
-            Route::get('/list', ['as' => 'orders.my.list', 'uses' => 'StoreController@myStores']);
+            Route::get('/list', ['as' => 'store.my.list', 'uses' => 'StoreController@myStores']);
         });
+    });
+
+    Route::group(['prefix' => 'file'], function () {
     });
 
 });

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Services\Memcache\Memcache;
 use App\Models\Images;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class FileService extends Service {
 
@@ -96,28 +97,26 @@ class FileService extends Service {
      * @param Arquivos $arquivo
      * @return String Base64|null
      */
-    public function recuperarArquivoWS($key, $bucket)
+    public function recuperarArquivoWS($key=null, $bucket=null)
     {
         try {
             $image = null;
-            $s3 = \AWS::createClient('s3');
-            $object = $s3->getObject(array(
-                'Bucket' => $bucket,
-                'Key' => $key
-            ));
 
-            $imagemContent = base64_encode((string)$object['Body']);
-
-            if (mb_strlen($imagemContent) > 1024) {
-                $manager = new \Intervention\Image\ImageManager();
-                $img = $manager->make((string)$object['Body'])
-                    ->widen(1024)
-                    ->encode('data-url');
-                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $img));
-            }
+            $exists = Storage::disk('s3')->exists('13f34e2b533e12c6166f88368dcd8c07_XL.jpg');
+dd($exists);
+//            $imagemContent = base64_encode((string)$object['Body']);
+//
+//            if (mb_strlen($imagemContent) > 1024) {
+//                $manager = new \Intervention\Image\ImageManager();
+//                $img = $manager->make((string)$object['Body'])
+//                    ->widen(1024)
+//                    ->encode('data-url');
+//                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $img));
+//            }
 
             return $image;
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return null;
         }
     }
