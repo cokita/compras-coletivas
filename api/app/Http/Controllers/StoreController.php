@@ -201,12 +201,14 @@ class StoreController extends Controller
         try {
             $user = Auth::user();
             $groups = Stores::query()
-                ->select(['stores.name as group', 'stores.description as group_description', 'images.path as image_url',
+                ->select(['stores.name as group', 'stores.description as group_description',
+                    'files.path as image_url','files2.path as file_url',
                     'own.name as owner', 'own.email as owners_email', 'own.cellphone as owners_cellphone'])
                 ->join('users as own', 'own.id', '=', 'stores.user_id')
                 ->join('stores_users', 'stores_users.store_id', '=', 'stores.id')
                 ->join('users', 'users.id', '=', 'stores_users.user_id')
-                ->leftJoin('images', 'images.id', '=', 'stores.image_id')
+                ->leftJoin('files', 'files.id', '=', 'stores.image_id')
+                ->leftJoin('files as files2', 'files2.id', '=', 'stores.file_id')
                 ->where('stores.active', '=', 1)
                 ->where('users.id', '=', $user->id)
                 ->get();

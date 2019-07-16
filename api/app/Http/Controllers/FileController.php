@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Validator;
@@ -78,7 +79,14 @@ class FileController extends Controller
      */
     public function show($id)
     {
-        //
+        $fileService = new FileService(Auth::user());
+        $fileService->recuperarArquivoWS();
+
+        $file = File::find($id);
+        return response([
+            'status' => 'success',
+            'data' => $file
+        ]);
     }
 
     /**
