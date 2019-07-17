@@ -10,7 +10,7 @@ export class LoginService {
 
   constructor(private coreService: CoreService, private route: ActivatedRoute,
               private router: Router) {
-      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/admin';
   }
 
   login(email: string, password: string) {

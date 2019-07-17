@@ -10,7 +10,7 @@ export const routes: Routes = [
     path: 'admin',
     loadChildren: './internal/internal.module#InternalModule',
   },
-  { path: '**', redirectTo: '' }
+   { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

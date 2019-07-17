@@ -8,12 +8,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CommonModule } from '@angular/common';
+import { MaskDirective } from './mask.directive';
 
 @NgModule({
-  declarations: [],
+  declarations: [MaskDirective],
   imports: [
   ],
   exports: [
+    MaskDirective,
     CommonModule,
     MaterialSharedModule,
     FontAwesomeModule,
