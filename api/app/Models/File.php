@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\FileService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $path
  * @property string $unique_name
  * @property string $updated_at
+ * @property int $file_type_id
  * @property Stores[] $stores_files
  * @property Stores[] $stores_images
  */
@@ -22,7 +24,7 @@ class File extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'active', 'bucket_amazon', 'created_at', 'name', 'path', 'unique_name', 'updated_at'];
+    protected $fillable = ['user_id', 'active', 'bucket_amazon', 'created_at', 'name', 'path', 'unique_name', 'updated_at', 'file_type_id'];
 
     /**
      * The connection name for the model.
@@ -30,6 +32,8 @@ class File extends Model
      * @var string
      */
     protected $connection = 'mysql';
+
+    protected $appends = array('Url', 'UrlThumb');
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -53,5 +57,22 @@ class File extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id', 'user_id');
+    }
+
+
+    //------------------------------------------------------------------------------------------------------------------
+    // EXTRA ATTRIBUTES
+    //------------------------------------------------------------------------------------------------------------------
+
+    public function getUrlAttribute()
+    {
+        $arquivoService = new FileService();
+        return $arquivoService->retornarUrlFile($this);
+    }
+
+    public function getUrlThumbAttribute()
+    {
+        $arquivoService = new FileService();
+        return $arquivoService->retornarUrlThumbFile($this);
     }
 }

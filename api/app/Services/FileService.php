@@ -2,261 +2,137 @@
 
 namespace App\Services;
 
-use App\Services\Memcache\Memcache;
-use App\Models\Images;
+use App\Constants\ConstFileType;
+use App\Models\File;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
 
 class FileService extends Service {
 
-    /**
-     * @var User
-     */
-    protected $user;
-
-    public function __construct($user = null)
+    public function __construct()
     {
-        $this->user = $user;
     }
 
     /**
-     * Metodo que retorna a url do arquivo
-     *
-     * @author Ana Carvalho
-     * @param Images $arquivo
-     * @return String|null
-     * @throws \Exception
+     * @param $file UploadedFile
+     * @param $path
+     * @param int $idFileType
      */
-    public function retornarUrlFile($arquivo)
+    public function salvar($file, $path, $idFileType=null)
     {
-        if (!$arquivo)
-            throw new \Exception("Arquivo não informado");
+        $nomeImg = md5(date("YmDHisu") . uniqid()) . "." . $file->getClientOriginalExtension();
+        if(substr($path, -1) !== '/')
+            $path = $path.'/';
+
+        if(!$idFileType)
+            $idFileType = ConstFileType::IMAGE;
+
+        $fileObj = new File();
+        $fileObj->name = $file->getClientOriginalName();
+        $fileObj->unique_name = $nomeImg;
+        $fileObj->path = $path.$nomeImg;
+        $fileObj->bucket_amazon = env('AWS_BUCKET');
+        $fileObj->user_id = auth()->user()->id;
+        $fileObj->file_type_id = $idFileType;
+        $fileObj->save();
+
+        return $fileObj;
+    }
+
+
+    public function retornarUrlFile($file)
+    {
         try {
-            //Verifica se o registro tem um bucket, caso tenha busca o arquivo na amazon
-            if (!$arquivo->BucketAmazon) {
-                $arquivo->BucketAmazon = env('imagenspedidos');
-            }
-
-            $memcache = new Memcache();
-            $urlApi = 'http://' . \Illuminate\Support\Facades\Request::getHttpHost();
-            if (!$memcache->get($arquivo->Id)) {
-                $amazonKey = preg_match("/({$arquivo->NomeArquivado})$/", $arquivo->Path) ? $arquivo->Path : $arquivo->Path . '/' . $arquivo->NomeArquivado;
-                $imagem = $this->recuperarArquivoWS($amazonKey, $arquivo->BucketAmazon);
-                $memcache->set($arquivo->Id, $imagem, MEMCACHE_COMPRESSED, $memcache->expiraCache());
-            }
-
-            return $urlApi . '/Livre/retornar-arquivo-memcache/' . $arquivo->Id;
+            if (!$file)
+                throw new \Exception("Arquivo não informado");
+            return $this->gerarUrlPublica($file->path);
         } catch (\Exception $e) {
             return null;
         }
 
     }
 
-    /**
-     * Metodo que retorna a url do arquivo THUMB
-     *
-     * @author Ana Carvalho
-     * @param Arquivos $arquivo
-     * @return String|null
-     * @throws \Exception
-     */
-    public function retornarUrlThumbFile($arquivo)
+    public function retornarUrlThumbFile($file)
     {
-        if (!$arquivo)
-            throw new \Exception("Arquivo não informado");
         try {
-            //Verifica se o registro tem um bucket, caso tenha busca o arquivo na amazon
-            if (!$arquivo->BucketAmazon) {
-                $arquivo->BucketAmazon = env('imagenspedidos');
-            }
+            if (!$file)
+                throw new \Exception("Arquivo não informado");
 
-            $memcache = new Memcache();
-            $urlApi = 'http://' . \Illuminate\Support\Facades\Request::getHttpHost();
-
-            if (!$memcache->get('thumb_'.$arquivo->Id)) {
-                $amazonKeyFile = preg_match("/({$arquivo->NomeArquivado})$/", $arquivo->Path) ? $arquivo->Path : $arquivo->Path . '/' . $arquivo->NomeArquivado;
-                $nomePastaThumb = $arquivo->BucketAmazon == "imagensclientes" || $arquivo->BucketAmazon == "caixacrescertestes" ? "thumb/" : "Thumbnail/";
-                $amazonKey = str_replace($arquivo->NomeArquivado, $nomePastaThumb . $arquivo->NomeArquivado, $amazonKeyFile);
-                $imagem = $this->recuperarArquivoWS($amazonKey, $arquivo->BucketAmazon);
-                if(!$imagem){
-                    throw new \Exception("Imagem não encontrada");
-                }
-                $memcache->set('thumb_' . $arquivo['Id'], $imagem, MEMCACHE_COMPRESSED, $memcache->expiraCache());
-            }
-
-            return $urlApi . '/Livre/retornar-arquivo-memcache/thumb_' . $arquivo->Id;
+            return $this->gerarUrlPublica(dirname($file->path) . "/thumb/" . basename($file->path));
         } catch (\Exception $e) {
-            return null;
+            throw $e;
         }
     }
 
-    /**
-     * Metodo que retorna a base64 do arquivo que esta no S3 da amazon
-     *
-     * @author Ana Carvalho
-     * @param Arquivos $arquivo
-     * @return String Base64|null
-     */
-    public function recuperarArquivoWS($key=null, $bucket=null)
+    public function gerarUrlPublica($path, $lifeTime='20')
     {
-        try {
-            $image = null;
-
-            $exists = Storage::disk('s3')->exists('13f34e2b533e12c6166f88368dcd8c07_XL.jpg');
-dd($exists);
-//            $imagemContent = base64_encode((string)$object['Body']);
+//        Cache::forget($path);
+//        $pathCach = Cache::get($path);
 //
-//            if (mb_strlen($imagemContent) > 1024) {
-//                $manager = new \Intervention\Image\ImageManager();
-//                $img = $manager->make((string)$object['Body'])
-//                    ->widen(1024)
-//                    ->encode('data-url');
-//                $image = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $img));
-//            }
+//        if(!$pathCach){
+            $s3 = Storage::disk('s3');
+            $client = $s3->getDriver()->getAdapter()->getAdapter()->getClient();
 
-            return $image;
+            $command = $client->getCommand('GetObject', [
+                'Bucket' => env('AWS_BUCKET'),
+                'Key' => $path
+            ]);
+
+            $request = $client->createPresignedRequest($command, 20);
+
+            //Cache::put($path, (string)$request->getUri(), $lifeTime);
+//            $pathCach = Cache::get($path);
+//        }
+
+        return (string)$request->getUri();
+    }
+
+    /**
+     * @param $file UploadedFile
+     * @param $arquivo File
+     */
+    public function uploadImageByBinary($file, $arquivo)
+    {
+        try {
+            $file->store($arquivo->path, 's3');
+
+            $this->gerarThumb($file, $arquivo);
+
+            return $arquivo;
+
         } catch (\Exception $e) {
             dd($e->getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * SEMPRE CHAMAR ESSE METODO DENTRO DE UM TRY-CATCH e COM TRANSACTION
-     * Salva o objeto na tabela de arquivos e salva na AMAZON. Retorna o objeto arquivo para vincular onde quiser.
-     * @param $arquivo
-     * @param null $alternativePath
-     * @return Arquivos
-     * @throws \Exception
-     */
-    public function salvar($arquivo, $alternativePath = null){
-        try {
-            $cliente = Clientes::find($arquivo['IdCliente']);
-
-            if (!$cliente)
-                throw new \Exception("Cliente não encontrado");
-
-            $arquivoObj = new Arquivos();
-            $arquivoObj->fill($arquivo);
-            $arquivoObj->NomeArquivado = md5($arquivo['IdCliente'] . date("YmDHisu") . uniqid()) . ".jpg";
-            $arquivoObj->Path = $alternativePath ? $alternativePath . "/" . $arquivoObj->NomeArquivado : $arquivoObj->IdCliente . "/" . $arquivoObj->NomeArquivado;
-            $arquivoObj->save();
-            $this->uploadArquivoBase64AWS($arquivoObj, $arquivo['Base64']);
-            if(!empty($arquivo['Exif'])){
-                $this->salvarExif($arquivoObj, $arquivo['Exif']);
-            }
-
-            return $arquivoObj;
-        }catch (\Exception $e){
-
             throw $e;
         }
     }
 
-    /**
-     * @param array|Arquivos $arquivo
-     * @param $base64
-     * @return Arquivos
-     * @throws \Exception
-     * @internal param null $alternativePath
-     */
-    public function uploadArquivoBase64AWS(Arquivos $arquivo, $base64)
-    {
-        $filePath = storage_path('app/public') . "/" . $arquivo->NomeArquivado;
-        try {
-            $manager = new \Intervention\Image\ImageManager();
-            $manager->make($base64)
-                ->widen(1024)
-                ->save($filePath, 80);
-
-            $s3 = \AWS::createClient('s3');
-            $amazonResult = $s3->putObject(array(
-                'Bucket' => $arquivo->BucketAmazon,
-                'Key' => $arquivo->Path,
-                'SourceFile' => $filePath
-            ));
-
-            $this->gerarThumb($arquivo, $filePath);
-
-            //verifica se o arquivos existe no local onde foi salvo e o remove da pasta
-            if (file_exists($filePath))
-                unlink($filePath);
-
-            return $amazonResult;
-        } catch (\Exception $e) {
-            //verifica se o arquivos existe no local onde foi salvo e o remove da pasta
-            if (file_exists($filePath))
-                unlink($filePath);
-
-            throw $e;
-        }
-
-    }
-
-    /**
-     * @param Arquivos $arquivo
-     * @param $file (arquivo salvo localmente temporariamente)
-     * @return mixed
-     * @throws \Exception
-     * @internal param null $alternativePath
-     */
-    public function gerarThumb(Arquivos $arquivo, $file)
+    public function gerarThumb($pathOrBinary, $arquivo)
     {
         try {
-            $manager = new \Intervention\Image\ImageManager();
-            $img = $manager->make($file)
+            $manager = new ImageManager();
+            $path = storage_path('app/public').'/'.basename($arquivo->path);
+            $img = $manager->make($pathOrBinary)
                 ->fit(200, 200)
-                ->encode('data-url');
+                ->save($path, 90);
+            $key = dirname($arquivo->path) . "/thumb/" . basename($arquivo->path);
 
-            $pathThumb = 'Thumbnail';
-            if ($arquivo->BucketAmazon == "imagensclientes" || $arquivo->BucketAmazon == "caixacrescertestes") {
-                $pathThumb = 'thumb';
-            }
+            Storage::disk('s3')->put($key, $path);
 
-            $pathInfo = pathinfo($arquivo->Path);
-            $s3 = \AWS::createClient('s3');
-            $amazonResult = $s3->putObject(array(
-                'Bucket' => $arquivo->BucketAmazon,
-                'Key' => $pathInfo['dirname'] . "/".$pathThumb."/".$pathInfo['basename'],
-                'Body' => base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $img))
-            ));
+            if (file_exists($path))
+                unlink($path);
 
-            return $amazonResult;
+            return $arquivo;
 
         } catch (\Exception $e) {
             throw $e;
         }
+
     }
 
-    /**
-     * @param $arquivo
-     * @param $data
-     * EX:  {
-     * Marca: resultExif.Make ? resultExif.Make.replace(expression, '').trim() : null,
-     * Modelo: resultExif.Model ? resultExif.Model.replace(expression, '').trim() : null,
-     * Software: resultExif.Software ? resultExif.Software.replace(expression, '').trim() : null,
-     * Altitude: resultExif.GPSAltitude ? resultExif.GPSAltitude.numerator : null,
-     * Data: resultExif.DateTime ? resultExif.DateTime : null,
-     * Dataoriginal: resultExif.DateTimeOriginal ? resultExif.DateTimeOriginal : null,
-     * Longitude: ImagemService.exifGPSPositionDecimal(resultExif.GPSLongitude, resultExif.GPSLongitudeRef),
-     * Latitude: ImagemService.exifGPSPositionDecimal(resultExif.GPSLatitude, resultExif.GPSLatitudeRef)
-     * }
-     * @return ArquivoExif
-     * @throws \Exception
-     */
-    public function salvarExif($arquivo, $data)
-    {
-        try {
-            $arquivoExif = new ArquivoExif();
-            $arquivoExif->fill($data);
-            $arquivoExif->IdArquivo = $arquivo->Id;
-            $arquivoExif->save();
 
-            return $arquivoExif;
-
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
 
 }

@@ -63,6 +63,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     });
 
     Route::group(['prefix' => 'file'], function () {
+        Route::post('/', ['as' => 'store', 'uses' => 'FileController@store']);
     });
 
 });

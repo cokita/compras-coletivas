@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
          $this->call(OAuthSeeder::class);
          $this->call(OrderTypeTableSeeder::class);
          $this->call(OrderStatusTableSeeder::class);
+         $this->call(FilesTypeTableSeeder::class);
     }
 }

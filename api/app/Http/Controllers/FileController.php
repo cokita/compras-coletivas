@@ -34,32 +34,32 @@ class FileController extends Controller
 
     /**
      * Método para salvar o arquivo e enviar para AMAZON!
-     * @param Request $request
-     * {
-    "base_64":"data:image/jpeg;base64,...",
-    "BucketAmazon":"caixacrescertestes",
-    "IdTipoArquivo":20,
-    "MimeType":"image/jpeg",
-    "NomeOriginal":"nutella.jpg",
-    "HashBase64Length":63051
-    }
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request){
+    public function store(){
         DB::beginTransaction();
         try {
-            //Verifica se o tamanho do hash base64 da imagem é do tamanho que foi postada
-            if (strlen($request->get("Base64")) != $request->get("HashBase64Length")) {
-                throw new \Exception("Erro ao verificar o hash base 64 da imagem, tamanho do hash não confere.");
-            }
+            dd(File::find(21)->toArray());
+            $data = collect(request()->all());
 
-            $fileService = new FileService(Auth::user());
-            $result = $fileService->salvar($request->all());
+            validate($data->toArray(), [
+                'file' => 'required',
+                'path' => 'required',
+            ],[
+                'file' => 'Favor informar o arquivo.',
+                'path' => 'Favor informar o path do arquivo.'
+            ]);
+
+            $fileService = new FileService();
+            $file = $fileService->salvar($data->get('file'), $data->get('path'), $data->get('file_type_id'));
+
+            $fileService->uploadImageByBinary($data->get('file'), $file);
 
             DB::commit();
             return response([
                 'status' => 'success',
-                'data' => $result
+                'data' => $file
             ]);
 
         }catch (\Exception $e){
