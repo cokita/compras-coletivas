@@ -33,7 +33,7 @@ class File extends Model
      */
     protected $connection = 'mysql';
 
-    protected $appends = array('Url', 'UrlThumb');
+    protected $appends = array('url', 'url_thumb');
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

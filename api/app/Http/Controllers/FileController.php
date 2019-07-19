@@ -40,7 +40,6 @@ class FileController extends Controller
     public function store(){
         DB::beginTransaction();
         try {
-            dd(File::find(21)->toArray());
             $data = collect(request()->all());
 
             validate($data->toArray(), [
@@ -79,9 +78,6 @@ class FileController extends Controller
      */
     public function show($id)
     {
-        $fileService = new FileService(Auth::user());
-        $fileService->recuperarArquivoWS();
-
         $file = File::find($id);
         return response([
             'status' => 'success',

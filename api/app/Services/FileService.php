@@ -68,12 +68,12 @@ class FileService extends Service {
         }
     }
 
-    public function gerarUrlPublica($path, $lifeTime='20')
+    public function gerarUrlPublica($path, $lifeTime='1440')
     {
-//        Cache::forget($path);
-//        $pathCach = Cache::get($path);
-//
-//        if(!$pathCach){
+        //Cache::forget($path);
+        $pathCach = Cache::get($path);
+
+        if(!$pathCach){
             $s3 = Storage::disk('s3');
             $client = $s3->getDriver()->getAdapter()->getAdapter()->getClient();
 
@@ -82,13 +82,13 @@ class FileService extends Service {
                 'Key' => $path
             ]);
 
-            $request = $client->createPresignedRequest($command, 20);
+            $request = $client->createPresignedRequest($command, "+{$lifeTime} minutes");
 
-            //Cache::put($path, (string)$request->getUri(), $lifeTime);
-//            $pathCach = Cache::get($path);
-//        }
+            Cache::put($path, (string)$request->getUri(), $lifeTime);
+            $pathCach = Cache::get($path);
+        }
 
-        return (string)$request->getUri();
+        return $pathCach;
     }
 
     /**
@@ -98,7 +98,7 @@ class FileService extends Service {
     public function uploadImageByBinary($file, $arquivo)
     {
         try {
-            $file->store($arquivo->path, 's3');
+            $file->storeAs(dirname($arquivo->path), basename($arquivo->path), 's3');
 
             $this->gerarThumb($file, $arquivo);
 
@@ -120,7 +120,7 @@ class FileService extends Service {
                 ->save($path, 90);
             $key = dirname($arquivo->path) . "/thumb/" . basename($arquivo->path);
 
-            Storage::disk('s3')->put($key, $path);
+            Storage::disk('s3')->put($key, file_get_contents($path));
 
             if (file_exists($path))
                 unlink($path);
