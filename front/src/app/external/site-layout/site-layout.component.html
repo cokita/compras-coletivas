@@ -1,1 +1,22 @@
-<p>site-layout works!</p>
+<div class="main">
+    <div class="float-menu">
+        <button mat-fab color="primary" class="menu-float-button">
+            <i class="material-icons">menu</i>
+        </button>
+    </div>
+    <div class="container">
+        <div fxLayout="row" fxLayout.xs="column" fxFlexFill>
+            <div fxFlex="40%" class="left-size" fxLayoutAlign="center center">
+                Left
+            </div>
+            <div fxFlex="60%" class="right-size">
+                <div fxLayout="column" fxLayout.xs="column" fxFlexFill>
+                    <div class="right-top" fxFlex="50" fxLayoutAlign="center center">
+                        TOP
+                    </div>
+                    <div class="right-bottom" fxFlex="50" fxLayoutAlign="center center">BOTTOM</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
