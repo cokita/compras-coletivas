@@ -8,7 +8,7 @@ class Orders extends Model
 {
     protected $table = 'orders';
     protected $fillable = [
-        'id', 'name', 'description', 'active', 'store_id', 'order_type_id', 'order_history_id'
+        'id', 'name', 'description', 'active', 'store_id', 'order_type_id', 'order_history_id', 'file_id'
     ];
 
     public function store()
@@ -23,7 +23,7 @@ class Orders extends Model
 
     public function orderHistory()
     {
-        return $this->hasOne('App\Models\OrderHistory', 'id', 'order_history_id');
+        return $this->belongsTo(OrderHistory::class, 'order_history_id');
     }
 
     public function histories()
@@ -36,5 +36,9 @@ class Orders extends Model
         return $this->hasMany(OrderCatalog::class, 'order_id', 'id');
     }
 
+    public function image()
+    {
+        return $this->hasOne(File::class, 'id', 'file_id');
+    }
 }
 

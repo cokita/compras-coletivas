@@ -138,7 +138,7 @@ class OrdersController extends Controller
      */
     public function show($id)
     {
-        $orders = Orders::find($id);
+        $orders = Orders::find($id)->with(['orderHistory', 'orderHistory.status', 'image'])->first();
         return response([
             'status' => 'success',
             'data' => $orders

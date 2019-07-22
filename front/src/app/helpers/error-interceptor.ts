@@ -10,7 +10,7 @@ import { LoginService } from "../external/login/login.service";
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
     constructor(private loginService: LoginService, private _router: Router, public snackBar: MatSnackBar) {
-        console.log('aaaaaaaaaaa');
+        //console.log('aaaaaaaaaaa');
     }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): any {

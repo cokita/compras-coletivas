@@ -14,7 +14,7 @@ export class LoginService {
   }
 
   login(email: string, password: string) {
-      return this.coreService.post(`/login`, { email: email, password: password })
+      return this.coreService.post(`login`, { email: email, password: password })
           .subscribe(result => {
               if (result && result.user && result.access_token) {
                   localStorage.setItem('currentUser', JSON.stringify(result));

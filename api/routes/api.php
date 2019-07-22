@@ -17,7 +17,7 @@ Route::middleware('jwt.refresh')->get('/token/refresh', 'AuthController@refresh'
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::post('signup', ['as' => 'user.create', 'uses' => 'AuthController@register']);
+Route::post('signup', ['as' => 'user.store', 'uses' => 'UserController@store']);
 Route::post('login', ['as' => 'user.login', 'uses' => 'AuthController@login']);
 
 

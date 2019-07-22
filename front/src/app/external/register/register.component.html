@@ -1,7 +1,7 @@
-<div >
+<div>
     <section>
-        <div class="container" fxLayout="row" fxLayoutAlign="start stretch">
-            <div fxFlex="80%">
+        <div class="container" fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="70%">
                 <mat-card class="example-card" fxLayout="column" fxLayoutAlign="center center">
                     <mat-card-header>
                         <mat-card-title>
@@ -9,53 +9,54 @@
                         </mat-card-title>
                     </mat-card-header>
                     <mat-card-content class="full-width">
-                        <form #myForm="ngForm" class="example-form" ngNativeValidate (ngSubmit)="save()">
+                        <form [formGroup]="registerForm" class="example-form" ngNativeValidate (ngSubmit)="save()">
+                            <mat-form-field class="full-width">
+                                <input matInput placeholder="Nome Completo" formControlName="name" name="name" required>
+                                <mat-error *ngIf="validateFormControl.hasError('required')">
+                                    O nome é <strong>obrigatório</strong>
+                                </mat-error>
+                            </mat-form-field>
 
-                            <div [formGroup]="registerForm">
-                                <mat-form-field class="full-width">
-                                    <input matInput placeholder="Nome Completo" formControlName="name" name="name" required>
-                                    <mat-error *ngIf="validateFormControl.hasError('required')">
-                                        Nome é <strong>obrigatório</strong>
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
+                            <mat-form-field class="full-width">
+                                <input matInput placeholder="CPF" formControlName="cpf" appMask="999.999.999-99"
+                                       name="cpf" required>
+                                <mat-error *ngIf="validateFormControl.hasError('required')">
+                                    O CPF <strong>obrigatório</strong>
+                                </mat-error>
+                            </mat-form-field>
 
-                            <div [formGroup]="registerForm">
-                                <mat-form-field class="full-width">
-                                    <input matInput placeholder="CPF" formControlName="cpf" appMask="999.999.999-99" name="cpf" required>
-                                    <mat-error *ngIf="validateFormControl.hasError('required')">
-                                        CPF <strong>obrigatório</strong>
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
+                            <mat-form-field class="full-width">
+                                <input matInput placeholder="Telefone" formControlName="cellphone" type="tel"
+                                       appMask="(99) 99999-9999"
+                                       name="cellphone" required>
+                                <mat-error *ngIf="validateFormControl.hasError('required')">
+                                    O Telefone é <strong>obrigatório</strong>
+                                </mat-error>
+                            </mat-form-field>
 
-                            <div [formGroup]="registerForm">
-                                <mat-form-field class="full-width">
-                                    <input matInput placeholder="Telefone" formControlName="cellphone" type="tel" name="cellphone" required>
-                                    <mat-error *ngIf="validateFormControl.hasError('required')">
-                                        Telefone é <strong>obrigatório</strong>
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
+                            <mat-form-field class="full-width">
+                                <input matInput placeholder="Email" formControlName="email" name="email" required>
+                                <mat-error *ngIf="f.email.invalid">{{getErrorMessage()}}</mat-error>
+                            </mat-form-field>
 
-                            <div [formGroup]="registerForm">
-                                <mat-form-field class="full-width">
-                                    <input matInput placeholder="Email" formControlName="email" name="email" required>
-                                    <mat-error *ngIf="validateFormControl.hasError('email') && !validateFormControl.hasError('required')">
-                                        Email inválido.
-                                    </mat-error>
-                                    <mat-error *ngIf="validateFormControl.hasError('required')">
-                                        Telefone é <strong>obrigatório</strong>
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
-
+                            <mat-form-field class="full-width">
+                                <input matInput placeholder="Informe sua senha." formControlName="password"
+                                       [type]="hide ? 'password' : 'text'">
+                                <button mat-icon-button matSuffix type="button" (click)="hide = !hide"
+                                        [attr.aria-label]="'Esconder'" [attr.aria-pressed]="hide">
+                                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                </button>
+                                <mat-error *ngIf="validateFormControl.hasError('required')">
+                                    A senha é <strong>obrigatória</strong>
+                                </mat-error>
+                            </mat-form-field>
                             <mat-card-actions fxLayout="column" fxLayoutAlign="center center">
-                                <button mat-raised-button color="primary" type="submit">Cadastrar</button>
+                                <button mat-raised-button color="primary" type="submit"
+                                        [disabled]="!registerForm.valid">
+                                    Cadastrar
+                                </button>
                             </mat-card-actions>
-                            <p>Resultado: {{ result }}</p>
                         </form>
-                        <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
                     </mat-card-content>
                 </mat-card>
             </div>

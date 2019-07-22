@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\ConstProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 
 class UserController extends Controller
@@ -125,6 +128,53 @@ class UserController extends Controller
                 'status' => 'error',
                 'data' => $e->getMessage()
             ], $e->getCode() ? $e->getCode() : 400);
+        }
+    }
+
+    /**
+     * Object
+     * {
+     *      "email": "andrevini@gmail.com",
+     *      "name" : "André Vinicius da Silva Caixeta",
+     *      "password": "abcd1234",
+     *      "cellphone": "61998280155",
+     *      "cpf": "00713877146",
+     *      "birthday": "1985-07-13"
+     *   }
+     */
+    public function store(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            validate($request->all(), [
+                'email' => 'required|unique:users',
+                'name' => 'required',
+                'password' => 'required',
+                'cellphone' => 'required|unique:users',
+                'cpf' => 'required|unique:users|cpf'
+            ]);
+
+            $user = new User;
+            $user->email = $request->email;
+            $user->name = $request->name;
+            $user->password = bcrypt($request->password);
+            $user->cellphone = $request->cellphone;
+            $user->cpf = $request->cpf;
+            $user->birthday = $request->birthday;
+            if ($request->gender) {
+                $user->gender = $request->gender;
+            }
+            $user->save();
+            $user->profiles()->attach(ConstProfile::USUARIO);
+
+            DB::commit();
+            return response([
+                'status' => 'success',
+                'data' => $user
+            ], 200);
+        }catch (\Exception $e){
+            DB::rollBack();
+            return response(['status' => 'error', 'message' => $e->getMessage(), 'code' => $e->getCode() ? $e->getCode() : 400], $e->getCode() ? $e->getCode() : 400);
         }
     }
 }

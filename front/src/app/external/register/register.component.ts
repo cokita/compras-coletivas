@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, FormBuilder, FormGroupDirective, NgForm, Validators} from "@angular/forms";
+import {RegisterService} from "./register.service";
+import {ErrorStateMatcher} from "@angular/material";
+
 
 @Component({
   selector: 'app-register',
@@ -8,10 +11,11 @@ import {FormControl, FormGroup, FormBuilder, FormGroupDirective, NgForm, Validat
 })
 export class RegisterComponent implements OnInit {
 
-    constructor(private formBuilder: FormBuilder) {}
+    constructor(private formBuilder: FormBuilder, private registerService: RegisterService) {}
 
     registerForm: FormGroup;
     result: string;
+    hide:boolean = true;
 
     validateFormControl = new FormControl('', [
         Validators.required,
@@ -23,18 +27,24 @@ export class RegisterComponent implements OnInit {
             name: '',
             cpf: ['', Validators.required],
             cellphone: ['', Validators.required],
-            email: ['', Validators.required]
-
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', Validators.required]
         });
     }
 
+    get f() { return this.registerForm.controls; }
+
     save() {
-        //let result;
-        // this.user.cpf = this.registerForm.controls.cpf.value;
-        // this.user.nome = this.registerForm.controls.nome.value;
-        // this.user.telefone = this.registerForm.controls.telefone.value;
-        // this.user.email = this.registerForm.controls.email.value;
+        let formValues = this.registerForm.getRawValue();
+        this.registerService.register(formValues).add(result => {});
+
     }
+
+    getErrorMessage() {
+        return this.f.email.hasError('required') ? 'O e-mail é obrigatório.' :
+            this.f.email.hasError('email') ? 'E-mail inválido.' : '';
+    }
+
 
 
 }

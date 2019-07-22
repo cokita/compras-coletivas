@@ -18,6 +18,6 @@ class OrderHistory extends Model
 
     public function status()
     {
-        return $this->hasOne('App\Models\OrderStatus');
+        return $this->hasOne(OrderStatus::class, 'id');
     }
 }

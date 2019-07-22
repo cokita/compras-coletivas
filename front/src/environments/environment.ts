@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  endpoint: 'http://ana.compras.api/',
+  endpoint: 'http://ana.compras.api',
   envName: 'local'
 };
 

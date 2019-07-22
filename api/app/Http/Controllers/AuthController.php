@@ -11,56 +11,7 @@ use Validator;
 
 class AuthController extends Controller
 {
-    /**
-     * Object
-     * {
-     *      "email": "andrevini@gmail.com",
-     *      "name" : "André Vinicius da Silva Caixeta",
-     *      "password": "abcd1234",
-     *      "cellphone": "61998280155",
-     *      "cpf": "00713877146",
-     *      "birthday": "1985-07-13"
-     *   }
-     */
-    public function register(Request $request)
-    {
-        try {
-            DB::beginTransaction();
-            $validator = Validator::make($request->all(), [
-                'email' => 'required|unique:users',
-                'name' => 'required',
-                'password' => 'required',
-                'cellphone' => 'required|unique:users',
-                'cpf' => 'required|unique:users|cpf'
-            ]);
 
-            if ($validator->fails()) {
-                throw new \Exception($validator->getMessageBag(), 400);
-            }
-
-            $user = new User;
-            $user->email = $request->email;
-            $user->name = $request->name;
-            $user->password = bcrypt($request->password);
-            $user->cellphone = $request->cellphone;
-            $user->cpf = $request->cpf;
-            $user->birthday = $request->birthday;
-            if ($request->gender) {
-                $user->gender = $request->gender;
-            }
-            $user->save();
-            $user->profiles()->attach(ConstProfile::USUARIO);
-
-            DB::commit();
-            return response([
-                'status' => 'success',
-                'data' => $user
-            ], 200);
-        }catch (\Exception $e){
-            DB::rollBack();
-            return response(['status' => 'error', 'data' => $e->getMessage(), 'code' => $e->getCode() ? $e->getCode() : 400]);
-        }
-    }
     public function login(Request $request)
     {
         try {

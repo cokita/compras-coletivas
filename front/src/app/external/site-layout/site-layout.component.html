@@ -1,8 +1,14 @@
 <div class="main">
     <div class="float-menu">
-        <button mat-fab color="primary" class="menu-float-button">
+        <button [matMenuTriggerFor]="mainMenu" mat-fab color="primary" class="menu-float-button">
             <i class="material-icons">menu</i>
         </button>
+        <mat-menu #mainMenu="matMenu" class="mymegamenu">
+            <button mat-menu-item [routerLink]="['/login']">
+                <mat-icon>account_circle</mat-icon> Área Restrita </button>
+            <button mat-menu-item [routerLink]="['/register']">
+                <mat-icon>face</mat-icon> Cadastrar </button>
+        </mat-menu>
     </div>
     <div class="container">
         <div fxLayout="row" fxLayout.xs="column" fxFlexFill>
