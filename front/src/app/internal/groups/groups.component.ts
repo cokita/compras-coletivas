@@ -7,7 +7,7 @@ import {GroupsService} from "./groups.service";
   styleUrls: ['./groups.component.scss']
 })
 export class GroupsComponent implements OnInit {
-  protected myGroups:Array<object>;
+  public myGroups;
   constructor(private groupService: GroupsService) { }
 
   ngOnInit() {
