@@ -34,6 +34,10 @@ body {
 }
 
 .right-bottom{
+  background-color: #3f51b5;
+}
+
+.right-middle{
   background-color: rgb(144, 65, 153);
 }
 
@@ -55,4 +59,56 @@ body {
 
 .pull-left{
   float:left;
+}
+
+.title{
+  position: fixed;
+  border: 2px double #FFFFFF;
+  padding: 10px;
+  width: max-content;
+  //box-shadow: 0 0 0 5px white, 0 0 0 5px gray, 0 0 0 5px red;
+  box-shadow: 0 0 0 5px white, 10px 10px 10px rgba(0, 0, 0, 0.5);
+}
+
+.title.title-lg{
+  left: 27%;
+  font-size: 70px;
+}
+
+.title.title-md{
+  left: 22%;
+  font-size: 50px;
+  border: 1px double #FFFFFF;
+}
+
+.title.title-sm{
+  left: 17%;
+  font-size: 40px;
+  border: 1px solid #FFFFFF;
+}
+
+.title.title-xs{
+  position: static;
+  left: 0%;
+  font-size: 30px;
+  border: 1px solid #FFFFFF;
+}
+
+
+.footer{
+
+}
+
+.copyright{
+  border: 1px double #FFFFFF;
+  width: max-content;
+  padding: 12px;
+}
+
+.font-people{
+  font-size: 100px;
+}
+
+.slogan{
+  font-size: 40px;
 }

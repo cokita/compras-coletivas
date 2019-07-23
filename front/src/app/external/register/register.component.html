@@ -50,7 +50,8 @@
                                     A senha é <strong>obrigatória</strong>
                                 </mat-error>
                             </mat-form-field>
-                            <mat-card-actions fxLayout="column" fxLayoutAlign="center center">
+                            <mat-card-actions fxLayout="row" fxLayoutAlign="center center">
+                                <button mat-raised-button color="accent" type="button" [routerLink]="['/']">Voltar</button>
                                 <button mat-raised-button color="primary" type="submit"
                                         [disabled]="!registerForm.valid">
                                     Cadastrar

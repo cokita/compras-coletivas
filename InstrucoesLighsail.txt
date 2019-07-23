@@ -1,0 +1,18 @@
+Conectar via SSH com chave privada (keyComprasColetivas2019.pem)
+
+sudo chmod 400 keyComprasColetivas2019.pem
+ssh -i keyComprasColetivas2019.pem bitnami@18.208.221.162
+sudo cat /home/bitnami/bitnami_credentials
+
+mysql -u root -p Ec5jn5Xm4gZu
+
+sudo /opt/bitnami/ctlscript.sh status mysql
+sudo /opt/bitnami/ctlscript.sh status apache
+sudo /opt/bitnami/ctlscript.sh start apache
+sudo /opt/bitnami/ctlscript.sh stop apache
+sudo /opt/bitnami/ctlscript.sh restart apache
+
+
+PHPMyAdmin - http://54.226.202.123/phpmyadmin/
+user: administrator
+senha: Afpc3131##

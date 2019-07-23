@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {FormControl, FormGroup, FormBuilder, FormGroupDirective, NgForm, Validators} from "@angular/forms";
 import {RegisterService} from "./register.service";
-import {ErrorStateMatcher} from "@angular/material";
 
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
+  encapsulation: ViewEncapsulation.None,
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
