@@ -9,7 +9,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION;
 #
 CREATE DATABASE IF NOT EXISTS `compras` COLLATE 'utf8_general_ci' ;
 GRANT ALL ON `compras`.* TO 'admin'@'%' ;
-FLUSH PRIVILEGES ;
+    FLUSH PRIVILEGES ;
 
 
 Laravel Commands
