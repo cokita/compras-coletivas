@@ -10,9 +10,10 @@ import {MaterialSharedModule} from "../material-shared/material-shared.module";
 import { GroupsComponent } from './groups/groups.component';
 import { GroupsDetailsComponent } from './groups/groups-details/groups-details.component';
 import { GroupsSettingsComponent } from './groups/groups-settings/groups-settings.component';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
-    declarations: [LayoutComponent, HeaderComponent, SidebarComponent, HomeComponent, GroupsComponent, GroupsDetailsComponent, GroupsSettingsComponent],
+    declarations: [LayoutComponent, HeaderComponent, SidebarComponent, HomeComponent, GroupsComponent, GroupsDetailsComponent, GroupsSettingsComponent, UserComponent],
     imports: [
         InternalRoutingModule,
         MaterialSharedModule,

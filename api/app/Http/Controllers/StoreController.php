@@ -200,23 +200,23 @@ class StoreController extends Controller
     {
         try {
             $user = Auth::user();
-            $groups = Stores::query()
-                ->select(['stores.name as group', 'stores.description as group_description',
-                    'files.path as image_url','files2.path as file_url',
-                    'own.name as owner', 'own.email as owners_email', 'own.cellphone as owners_cellphone'])
-                ->join('users as own', 'own.id', '=', 'stores.user_id')
-                ->join('stores_users', 'stores_users.store_id', '=', 'stores.id')
-                ->join('users', 'users.id', '=', 'stores_users.user_id')
-                ->leftJoin('files', 'files.id', '=', 'stores.image_id')
-                ->leftJoin('files as files2', 'files2.id', '=', 'stores.file_id')
-                ->where('stores.active', '=', 1)
-                ->where('users.id', '=', $user->id)
-                ->get();
+//            $groups = Stores::query()
+//                ->select(['stores.name as group', 'stores.description as group_description',
+//                    'files.path as image_url','files2.path as file_url',
+//                    'own.name as owner', 'own.email as owners_email', 'own.cellphone as owners_cellphone'])
+//                ->join('users as own', 'own.id', '=', 'stores.user_id')
+//                ->join('stores_users', 'stores_users.store_id', '=', 'stores.id')
+//                ->join('users', 'users.id', '=', 'stores_users.user_id')
+//                ->leftJoin('files', 'files.id', '=', 'stores.image_id')
+//                ->leftJoin('files as files2', 'files2.id', '=', 'stores.file_id')
+//                ->where('stores.active', '=', 1)
+//                ->where('users.id', '=', $user->id)
+//                ->get();
 
-//            $userId = $user->id;
-//            $groups = Stores::query()->with(['user','image', 'users' => function ($q) use ($userId) {
-//                $q->where('user_id', $userId);
-//            }])->get();
+            $userId = $user->id;
+            $groups = Stores::query()->with(['user','image', 'users' => function ($q) use ($userId) {
+                $q->where('user_id', $userId);
+            }])->get();
 
 
             return response([

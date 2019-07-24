@@ -4,16 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UsersProfiles extends Model
+class ProfilesActions extends Model
 {
-    protected $table = 'users_profiles';
+    protected $table = 'profiles_actions';
     protected $fillable = [
-        'id', 'user_id', 'profile_id', 'active'
+        'id', 'action_id', 'profile_id', 'active'
     ];
 
-    public function users()
+    public function actions()
     {
-        return $this->hasMany(User::class, 'id', 'user_id');
+        return $this->hasMany(Action::class, 'id', 'action_id');
     }
 
     public function profiles()

@@ -9,9 +9,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CommonModule } from '@angular/common';
 import { MaskDirective } from './mask.directive';
+import { UserPipe } from './pipes/user.pipe';
 
 @NgModule({
-  declarations: [MaskDirective],
+  declarations: [MaskDirective, UserPipe],
   imports: [
   ],
   exports: [
@@ -22,7 +23,8 @@ import { MaskDirective } from './mask.directive';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    UserPipe
   ]
 })
 export class SharedModule {
