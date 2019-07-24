@@ -1,0 +1,26 @@
+<div fxLayout="column" fxLayoutAlign="center" >
+    <div fxLayoutAlign="center" fxFlexFill>
+        <i class="material-icons fs-150 color-grey-500 cursor">photo_cameracd</i>
+    </div>
+    <div>
+        <mat-card class="example-card" fxLayout="column" fxLayoutAlign="center center">
+            <mat-card-content class="full-width">
+                <form [formGroup]="groupForm" ngNativeValidate (ngSubmit)="save()">
+                    <mat-form-field class="full-width">
+                        <input matInput placeholder="Nome do Grupo" formControlName="name" name="name" required>
+                        <mat-error *ngIf="validateFormControl.hasError('required')">
+                            O nome é <strong>obrigatório</strong>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="full-width">
+                        <textarea rows="4" matInput placeholder="Descrição" formControlName="description" name="description"></textarea>
+                    </mat-form-field>
+                    <mat-card-actions fxLayout="row" fxLayoutAlign="center">
+                        <button mat-raised-button color="primary" type="submit" [disabled]="!groupForm.valid">SALVAR</button>
+                        <button mat-raised-button color="accent" type="button" [routerLink]="['/admin/groups']">VOLTAR</button>
+                    </mat-card-actions>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

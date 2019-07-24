@@ -11,9 +11,10 @@ import { GroupsComponent } from './groups/groups.component';
 import { GroupsDetailsComponent } from './groups/groups-details/groups-details.component';
 import { GroupsSettingsComponent } from './groups/groups-settings/groups-settings.component';
 import { UserComponent } from './user/user.component';
+import { GroupsCreateComponent } from './groups/groups-create/groups-create.component';
 
 @NgModule({
-    declarations: [LayoutComponent, HeaderComponent, SidebarComponent, HomeComponent, GroupsComponent, GroupsDetailsComponent, GroupsSettingsComponent, UserComponent],
+    declarations: [LayoutComponent, HeaderComponent, SidebarComponent, HomeComponent, GroupsComponent, GroupsDetailsComponent, GroupsSettingsComponent, UserComponent, GroupsCreateComponent],
     imports: [
         InternalRoutingModule,
         MaterialSharedModule,

@@ -10,10 +10,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { CommonModule } from '@angular/common';
 import { MaskDirective } from './mask.directive';
 import { UserPipe } from './pipes/user.pipe';
+import {NgxSpinnerModule} from "ngx-spinner";
 
 @NgModule({
   declarations: [MaskDirective, UserPipe],
   imports: [
+      NgxSpinnerModule
   ],
   exports: [
     MaskDirective,
@@ -24,7 +26,8 @@ import { UserPipe } from './pipes/user.pipe';
     ReactiveFormsModule,
     HttpClientModule,
     FlexLayoutModule,
-    UserPipe
+    UserPipe,
+    NgxSpinnerModule
   ]
 })
 export class SharedModule {

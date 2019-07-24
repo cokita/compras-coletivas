@@ -5,11 +5,13 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
 import { LoginService } from "../external/login/login.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor(private loginService: LoginService, private _router: Router, public snackBar: MatSnackBar) {
+    constructor(private loginService: LoginService, private _router: Router, public snackBar: MatSnackBar,
+                private spinner: NgxSpinnerService) {
         //console.log('aaaaaaaaaaa');
     }
 

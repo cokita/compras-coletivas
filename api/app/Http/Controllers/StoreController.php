@@ -216,7 +216,7 @@ class StoreController extends Controller
             $userId = $user->id;
             $groups = Stores::query()->with(['user','image', 'users' => function ($q) use ($userId) {
                 $q->where('user_id', $userId);
-            }])->get();
+            }])->get()->toArray();
 
 
             return response([

@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {ErrorInterceptor} from "./helpers/error-interceptor";
+import {HttpRequestInterceptor} from "./helpers/http-request-interceptor";
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import {ErrorInterceptor} from "./helpers/error-interceptor";
     AppRoutingModule
   ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true }
     ],
   bootstrap: [AppComponent]
 })

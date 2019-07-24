@@ -7,6 +7,7 @@ import {UserGuard} from "./user.guard";
 import {GroupsComponent} from "./groups/groups.component";
 import {GroupsDetailsComponent} from "./groups/groups-details/groups-details.component";
 import {GroupsSettingsComponent} from "./groups/groups-settings/groups-settings.component";
+import {GroupsCreateComponent} from "./groups/groups-create/groups-create.component";
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
         { path: 'groups', component: GroupsComponent },
         { path: 'group-detail', component: GroupsDetailsComponent },
         { path: 'group-settings', component: GroupsSettingsComponent },
+        { path: 'group-create', component: GroupsCreateComponent},
     ],
     canActivate: [UserGuard],
   },
