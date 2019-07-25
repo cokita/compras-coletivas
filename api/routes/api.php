@@ -18,7 +18,7 @@ Route::middleware('jwt.refresh')->get('/token/refresh', 'AuthController@refresh'
 //     return $request->user();
 // });
 Route::post('signup', ['as' => 'user.store', 'uses' => 'UserController@store']);
-Route::post('login', ['as' => 'user.login', 'uses' => 'AuthController@login']);
+//Route::post('login', ['as' => 'user.login', 'uses' => 'AuthController@login']);
 
 
 //Resources e rotas exclusivos para ADM
@@ -42,12 +42,22 @@ Route::group(['middleware' => ['auth:api', 'roles'],'roles' => ['administrador',
 
 //Rotas que necessitam apenas estar autenticadas
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::post('auth/logout', ['as' => 'user.logout', 'uses' => 'AuthController@logout']);
+    Route::get('auth/logout', ['as' => 'user.logout', 'uses' => 'AuthController@logout']);
+
     Route::resource('order-type', 'OrderTypeController', ['only' => ['show', 'index']]);
-    Route::resource('user', 'UserController', ['only' => ['show', 'index', 'update']]);
+    //Route::resource('user', 'UserController', ['only' => ['show', 'index', 'update']]);
     Route::resource('store', 'StoreController', ['only' => ['show', 'index']]);
     Route::resource('order-catalog', 'OrderCatalogController');
     Route::resource('file', 'FileController', ['only' => ['show', 'index']]);
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/get-identity', ['as' => 'user.identity', 'uses' => 'UserController@getUserForLogin']);
+        Route::get('/{id}', ['as' => 'user.show', 'uses' => 'UserController@index']);
+        Route::put('/{id}', ['as' => 'user.update', 'uses' => 'UserController@update']);
+        Route::get('/', ['as' => 'user.index', 'uses' => 'UserController@index']);
+        Route::post('/', ['as' => 'user.store', 'uses' => 'UserController@store']);
+
+    });
 
     Route::group(['prefix' => 'orders'], function () {
         Route::get('/{id}', ['as' => 'orders.show', 'uses' => 'OrdersController@show']);

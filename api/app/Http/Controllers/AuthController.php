@@ -70,30 +70,26 @@ class AuthController extends Controller
             'data' => $user
         ]);
     }
-    /**
-     * Log out
-     * Invalidate the token, so user cannot use it anymore
-     * They have to relogin to get a new token
-     *
-     * @param Request $request
-     */
-    public function logout(Request $request) {
-        $this->validate($request, ['token' => 'required']);
-        
-        try {
-            JWTAuth::invalidate($request->input('token'));
-            return response([
-            'status' => 'success',
-            'msg' => 'You have successfully logged out.'
-        ]);
-        } catch (JWTException $e) {
-            // something went wrong whilst attempting to encode the token
-            return response([
-                'status' => 'error',
-                'msg' => 'Failed to logout, please try again.'
+
+    public function logoutAll(Request $request) {
+
+        $accessToken = Auth::user()->token();
+        DB::table('oauth_refresh_tokens')
+            ->where('access_token_id', $accessToken->id)
+            ->update([
+                'revoked' => true
             ]);
-        }
+
+        $accessToken->revoke();
+        return response()->json(null, 204);
     }
+
+    public function logout(){
+        $user = Auth::user()->token();
+        $user->revoke();
+        return response()->json(null, 204);
+    }
+
     public function refresh()
     {
         return response([

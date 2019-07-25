@@ -56,6 +56,16 @@ class User extends Authenticatable
         return $this->hasMany(UsersProfiles::class, 'user_id', 'id');
     }
 
+    public function findForPassport($username)
+    {
+        return $this->where(function($q) use ($username) {
+            $q->where('cpf', $username);
+            $q->orWhere('cellphone', $username);
+            $q->orWhere('email', $username);
+        })->where('active', 1)->first();
+
+    }
+
     /**
      * Retorna se o usuario está em um perfil ou array de perfis
      *

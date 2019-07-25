@@ -19,3 +19,4 @@ senha: Afpc3131##
 
 
 sudo /etc/init.d/memcached status
+/opt/bitnami/ctlscript.sh restart php-fpm

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Constants\ConstProfile;
+use App\Models\ProfilesActions;
 use App\Models\User;
+use App\Models\UsersProfiles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -11,6 +13,31 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+
+    public function getUserForLogin()
+    {
+        $perfis = UsersProfiles::query()
+            ->join('profiles as p', 'p.Id', '=', 'users_profiles.profile_id')
+            ->where('user_id', auth()->user()->id)
+            ->select(['p.id', 'p.name'])
+            ->get();
+
+        if($perfis){
+            $count = 0;
+            foreach ($perfis->toArray() as $perfil){
+                $actions = ProfilesActions::query()
+                    ->join('actions as a', 'a.id', '=', 'profiles_actions.action_id')
+                    ->where('profiles_actions.profile_id', $perfil['id'])
+                    ->select(['a.id', 'a.name'])->get();
+                $perfis[$count]['actions'] = $actions->toArray();
+            }
+        }
+
+        $user = auth()->user()->toArray();
+        $user['profiles'] = $perfis;
+        return response()->json($user);
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -50,10 +77,7 @@ class UserController extends Controller
         }
 
         $user = $user->paginate();
-        return response([
-            'status' => 'success',
-            'data' => $user
-        ]);
+        return response($user);
 
     }
 
@@ -168,10 +192,7 @@ class UserController extends Controller
             $user->profiles()->attach(ConstProfile::USUARIO);
 
             DB::commit();
-            return response([
-                'status' => 'success',
-                'data' => $user
-            ], 200);
+            return response($user, 200);
         }catch (\Exception $e){
             DB::rollBack();
             return response(['status' => 'error', 'message' => $e->getMessage(), 'code' => $e->getCode() ? $e->getCode() : 400], $e->getCode() ? $e->getCode() : 400);
