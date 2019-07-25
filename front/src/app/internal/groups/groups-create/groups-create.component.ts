@@ -25,4 +25,7 @@ export class GroupsCreateComponent implements OnInit {
   ngOnInit() {
   }
 
+  save(){
+
+  }
 }
