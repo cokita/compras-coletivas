@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {CoreService} from 'src/app/core.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatSnackBar} from "@angular/material";
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -15,11 +16,15 @@ export class LoginService {
     }
 
     login(email: string, password: string) {
-        return this.coreService.post(`login`, {email: email, password: password})
-            .subscribe(result => {
-                if (result && result.user && result.access_token && result.user.profiles) {
+        return this.coreService.post(`oauth/token`, {
+            grant_type:'password',
+            client_id:environment.client_id,
+            client_secret:environment.client_secret,
+            username:email,
+            password:password
+        }).subscribe(result => {
+                if (result && result.access_token) {
                     localStorage.setItem('currentUser', JSON.stringify(result));
-                    this.setProfiles(result.user.profiles);
                     this.router.navigate([this.returnUrl]);
                 } else {
                     this.snackBar.open('Não foi possível efetuar o login, tente novamente mais tarde.', null, {
@@ -50,29 +55,5 @@ export class LoginService {
         if (all.token) {
             return all.token;
         }
-    }
-
-    setProfiles(profiles) {
-        console.log(profiles);
-        let arrAcoesPerfis = [];
-        profiles.forEach(objProfiles => {
-            let arrAcoes = objProfiles.actions;
-            let tagMap = arrAcoes.reduce(function (map, tag) {
-                map[tag.id] = tag.name;
-                return map;
-            }, {});
-
-            if(arrAcoesPerfis.length <= 0){
-                arrAcoesPerfis = Object.values(tagMap);
-            }else{
-                arrAcoesPerfis = arrAcoesPerfis.concat(Object.values(tagMap).filter(function (item) {
-                    return arrAcoesPerfis.indexOf(item) < 0;
-                }));
-            }
-        });
-
-        localStorage.setItem('actions_'+this.getUser().id, JSON.stringify(arrAcoesPerfis));
-
-        return arrAcoesPerfis;
     }
 }

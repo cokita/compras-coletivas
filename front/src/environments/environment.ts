@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   endpoint: 'http://ana.compras.api',
+  client_secret: '07iUHc42pvYofTaguo8sTfQD0zVbs6Zk5ocxsyfh',
+  client_id: 2,
   envName: 'local'
 };
 

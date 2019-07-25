@@ -67,4 +67,28 @@ export class UserService {
 
         return false;
     }
+
+    setProfiles(profiles) {
+        console.log(profiles);
+        let arrAcoesPerfis = [];
+        profiles.forEach(objProfiles => {
+            let arrAcoes = objProfiles.actions;
+            let tagMap = arrAcoes.reduce(function (map, tag) {
+                map[tag.id] = tag.name;
+                return map;
+            }, {});
+
+            if(arrAcoesPerfis.length <= 0){
+                arrAcoesPerfis = Object.values(tagMap);
+            }else{
+                arrAcoesPerfis = arrAcoesPerfis.concat(Object.values(tagMap).filter(function (item) {
+                    return arrAcoesPerfis.indexOf(item) < 0;
+                }));
+            }
+        });
+
+        localStorage.setItem('actions_'+this.getUser().id, JSON.stringify(arrAcoesPerfis));
+
+        return arrAcoesPerfis;
+    }
 }
