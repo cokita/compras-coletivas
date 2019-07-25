@@ -15,8 +15,15 @@ export class UserService {
     }
 
     async getActions(){
+        const actions = await JSON.parse(localStorage.getItem('actions_'+this.getUser().id));
+        if(actions){
+            return actions;
+        }
+    }
+
+    getActionsPromise(){
         return new Promise(resolve => {
-        const actions =JSON.parse(localStorage.getItem('actions_'+this.getUser().id));
+            const actions =JSON.parse(localStorage.getItem('actions_'+this.getUser().id));
             if(actions){
                 resolve(actions);
             }

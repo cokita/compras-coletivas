@@ -7,12 +7,11 @@ import {UserService} from "../../internal/user/user.service";
 export class UserPipe implements PipeTransform {
   constructor(private userService: UserService){}
 
-  async transform(value: any): any {
-      let actions = await this.userService.getActions();
-      if (actions && actions.indexOf(value) !== -1){
+  async transform(value: any): Promise<boolean> {
+      let actions = await this.userService.getActionsPromise();
+      if (actions && actions instanceof Array && actions.indexOf(value) !== -1){
           return true;
       }
-
       return false;
   }
 
