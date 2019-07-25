@@ -16,3 +16,6 @@ sudo /opt/bitnami/ctlscript.sh restart apache
 PHPMyAdmin - http://54.226.202.123/phpmyadmin/
 user: administrator
 senha: Afpc3131##
+
+
+sudo /etc/init.d/memcached status

@@ -63,11 +63,11 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
 
-            'cache' => [
-                'store' => 'memcached',
-                'expire' => 1200,
-                'prefix' => 'cache-prefix',
-            ],
+//            'cache' => [
+//                'store' => 'memcached',
+//                'expire' => 1200,
+//                'prefix' => 'cache-prefix',
+//            ],
         ],
 
     ],
