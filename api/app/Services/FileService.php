@@ -75,7 +75,7 @@ class FileService extends Service {
 
         if(!$pathCach){
             $s3 = Storage::disk('s3');
-            $client = $s3->getDriver()->getAdapter()->getAdapter()->getClient();
+            $client = $s3->getDriver()->getAdapter()->getClient();
 
             $command = $client->getCommand('GetObject', [
                 'Bucket' => env('AWS_BUCKET'),
@@ -89,6 +89,7 @@ class FileService extends Service {
         }
 
         return $pathCach;
+        //return (string)$request->getUri();
     }
 
     /**
