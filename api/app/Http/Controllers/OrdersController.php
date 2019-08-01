@@ -30,10 +30,12 @@ class OrdersController extends Controller
             $this->page = $data['page'];
         }
 
-        $orders = Orders::query();
 
         if(!empty($data['with'])){
-            $orders->with($data['with']);
+            $with = explode(',', $data['with']);
+            $orders = Orders::with($with);
+        }else{
+            $orders = Orders::query();
         }
         if(!empty($data['id'])){
             $orders->where('id', '=', $data['id']);
