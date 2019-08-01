@@ -1,26 +1,71 @@
-<div fxLayout="column" fxLayoutAlign="center" >
-    <div fxLayoutAlign="center center" fxFlexFill>
-        <i class="material-icons fs-150 color-grey-500 cursor">photo_cameracd</i>
-    </div>
+<div class="container-module">
     <div>
-        <mat-card class="example-card" fxLayout="column" fxLayoutAlign="center center">
-            <mat-card-content class="full-width">
-                <form [formGroup]="groupForm" ngNativeValidate (ngSubmit)="save()">
-                    <mat-form-field class="full-width">
-                        <input matInput placeholder="Nome do Grupo" formControlName="name" name="name" required>
-                        <mat-error *ngIf="validateFormControl.hasError('required')">
-                            O nome é <strong>obrigatório</strong>
-                        </mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="full-width">
-                        <textarea rows="4" matInput placeholder="Descrição" formControlName="description" name="description"></textarea>
-                    </mat-form-field>
-                    <mat-card-actions fxLayout="row" fxLayoutAlign="center">
-                        <button mat-raised-button color="primary" type="submit" [disabled]="!groupForm.valid">SALVAR</button>
-                        <button mat-raised-button color="accent" type="button" [routerLink]="['/admin/groups']">VOLTAR</button>
-                    </mat-card-actions>
-                </form>
-            </mat-card-content>
-        </mat-card>
+        <mat-toolbar color="basic">
+            <mat-toolbar-row>
+                <span>Cadastrar Grupo de Venda</span>
+                <span class="mattoolbar-spacer"></span>
+                <button mat-icon-button color="warn" [routerLink]="['/admin/groups']" *ngIf="'stores.store' | user | async">
+                    <mat-icon>navigate_before</mat-icon>
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
     </div>
+    <form [formGroup]="groupForm" ngNativeValidate (ngSubmit)="save()">
+        <div fxFlex="100" class="sec1" fxFlex.xs="55">
+            <div fxLayout="column" fxLayoutAlign="center center">
+                <div class="image-upload text-align-center" *ngIf="!imagePreviewSrc">
+                    <label for="file-input">
+                        <i class="material-icons color-grey-500 cursor camera-upload">photo_cameracd</i>
+                    </label>
+                    <input type="file" id="file-input" (change)="onFileChange($event)" #fileInput
+                           accept="image/png, image/jpeg">
+                    <!--<input id="file-input" type="file" accept="image/png, image/jpeg" formControlName="image" (change)="onFileChange($event)"  />-->
+                </div>
+                <div class="text-align-center" *ngIf="imagePreviewSrc">
+                    <img [src]="imagePreviewSrc" height="200">
+                    <div (click)="clearFile()" class="cursor">Remover</div>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center">
+                <div fxFlexOffset="0" fxFlex="20">&nbsp;</div>
+                <div fxFlexOffset="0" fxFlex="60">
+                    <mat-card class="example-card">
+                        <mat-card-content class="full-width">
+                            <mat-form-field class="full-width">
+                                <input matInput placeholder="Nome do Grupo" formControlName="name" name="name" required>
+                                <mat-error *ngIf="validateFormControl.hasError('required')">
+                                    O nome é <strong>obrigatório</strong>
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field class="full-width">
+                                <input matInput placeholder="Administradora" aria-label="Administradora"
+                                       [matAutocomplete]="auto" formControlName="user_id">
+                                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                                                  [displayWith]="displayFn" (optionSelected)="sellerSelected($event)">
+                                    <mat-option *ngFor="let seller of (filteredSellers | async)" [value]="seller">
+                                        <img class="option-img" aria-hidden [src]="(seller.file && seller.file.url_thumb) ? seller.file.url_thumb : noimage" height="25">
+                                        <span>{{seller.name}}</span> |
+                                        <small>Telefone: {{seller.cellphone}}</small>
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            <mat-form-field class="full-width">
+                                <textarea rows="4" matInput placeholder="Descrição" formControlName="description"
+                                          name="description"></textarea>
+                            </mat-form-field>
+                            <mat-card-actions fxLayout="row" fxLayoutAlign="center">
+                                <button mat-raised-button color="primary" type="submit" [disabled]="!groupForm.valid">
+                                    SALVAR
+                                </button>
+                                <button mat-raised-button color="accent" type="button" [routerLink]="['/admin/groups']">
+                                    VOLTAR
+                                </button>
+                            </mat-card-actions>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <div fxFlexOffset="0" fxFlex="20">&nbsp;</div>
+            </div>
+        </div>
+    </form>
 </div>

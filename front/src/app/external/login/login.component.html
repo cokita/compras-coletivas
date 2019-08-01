@@ -1,7 +1,7 @@
 <div >
-  <div class="container" fxLayout="row" fxLayoutAlign="center center">
-    <div fxFlex="30%">
-      <mat-card class="example-card" fxLayout="column" fxLayoutAlign="center center">
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
+    <div fxFlex.lg="30%" fxFlex.md="50%">
+      <mat-card>
         <mat-card-header>
           <mat-card-title>
             <h1 class="md-display-3">Seja Bem-Vindo</h1>
@@ -27,10 +27,16 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <mat-card-actions fxLayout="row" fxLayoutAlign="center">
-              <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">ENTRAR</button>
-              <button mat-raised-button color="accent" type="button" [routerLink]="['/register']">CADASTRE-SE</button>
-              <button mat-raised-button color="teal" type="button" [routerLink]="['/']">IR PARA O INICIO</button>
+            <mat-card-actions fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutWrap fxLayoutGap="10px grid">
+              <div>
+                <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">ENTRAR</button>
+              </div>
+              <div>
+                <button mat-raised-button color="accent" type="button" [routerLink]="['/register']">CADASTRE-SE</button>
+              </div>
+              <div>
+                <button mat-raised-button color="teal" type="button" [routerLink]="['/']">IR PARA O INICIO</button>
+              </div>
             </mat-card-actions>
           </form>
           <!-- <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner> -->

@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'gender', 'active'
+       'id', 'name', 'email', 'password', 'gender', 'active', 'file_id'
     ];
 
     /**
@@ -44,6 +44,11 @@ class User extends Authenticatable
     public function store()
     {
         return $this->hasOne(Stores::class, 'user_id','id');
+    }
+
+    public function file()
+    {
+        return $this->hasOne(File::class, 'id','file_id');
     }
 
     public function ordersCatalog()

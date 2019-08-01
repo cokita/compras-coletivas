@@ -1,17 +1,26 @@
 import { Injectable } from '@angular/core';
+import {CoreService} from "../../core.service";
+import { map,  } from 'rxjs/operators';
+import {Users} from "../../shared/models/users";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor() { }
+  constructor(private coreService: CoreService) { }
 
     getUser(){
         const all =JSON.parse(localStorage.getItem('currentUser'));
         if(all.user){
             return all.user;
         }
+    }
+
+    search(search:object){
+        return this.coreService.get(`user`, search).pipe(
+            map(users => users.data)
+        );
     }
 
     async getActions(){

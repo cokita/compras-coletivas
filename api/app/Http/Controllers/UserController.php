@@ -46,7 +46,13 @@ class UserController extends Controller
     public function index()
     {
         $data = request()->all();
-        $user = User::query();
+
+        if(!empty($data['with'])){
+            $with = explode(',', $data['with']);
+            $user = User::with($with);
+        }else{
+            $user = User::query();
+        }
 
         if(isset($data['id'])){
             $user->where('id', '=', $data['id']);

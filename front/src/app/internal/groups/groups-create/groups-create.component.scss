@@ -1,0 +1,26 @@
+.image-upload>input {
+  display: none;
+}
+
+.camera-upload{
+  font-size: 150px;
+  width: 10%;
+}
+
+.container-module{
+  width: 100%;
+}
+
+.container-box{
+  width: 70%;
+}
+
+.option-img {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+[dir='rtl'] .option-img {
+  margin-right: 0;
+  margin-left: 8px;
+}

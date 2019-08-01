@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Stores;
 use App\Models\StoresUsers;
 use App\Models\User;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 use Validator;
 use Illuminate\Support\Facades\Auth;
@@ -64,22 +65,25 @@ class StoreController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
         try {
-            $validator = Validator::make($request->all(), [
+            $data = collect(request()->all());
+
+            validate($data->toArray(), [
                 'user_id' => 'required|unique:stores',
-                'name' => 'required'
+                'name' => 'required',
+                'image' => 'required'
+            ], [
+                'user_id.required' => 'O usuário administrador é obrigatório.',
+                'user_id.unique' => 'O usuário administrador já tem um grupo criado.',
+                'name' => 'O nome do grupo é obrigatório.',
+                'image' => 'Defina uma imagem para o grupo.',
             ]);
 
-            if ($validator->fails()) {
-                throw new \Exception($validator->getMessageBag(), 412);
-            }
-
-            $user_id = $request->get('user_id');
+            $user_id = $data->get('user_id');
             $seller = User::find($user_id);
 
             if(!$seller || $seller->active != 1)
@@ -91,10 +95,18 @@ class StoreController extends Controller
                 throw new \Exception("O usuário informado não é um VENDEDOR, os grupos podem ser vinculados apenas a vendedores!", 412);
 
             $store = new Stores();
-            $store->fill($request->all());
+            $store->fill($data->toArray());
             $store->save();
 
-            return response([
+            if($data->get('image')){
+                $fileService = new FileService();
+                $file = $fileService->salvar($data->get('image'), 'store/'.$store->id);
+                $fileService->uploadImageByBinary($data->get('image'), $file);
+                $store->image_id = $file->id;
+                $store->save();
+            }
+
+            return response()->json([
                 'status' => 'success',
                 'data' => $store
             ]);
@@ -102,7 +114,7 @@ class StoreController extends Controller
         }catch (\Exception $e){
             return response([
                 'status' => 'error',
-                'data' => $e->getMessage()
+                'message' => $e->getMessage()
             ], $e->getCode() ? $e->getCode() : 400);
         }
     }
@@ -200,24 +212,25 @@ class StoreController extends Controller
     {
         try {
             $user = Auth::user();
-//            $groups = Stores::query()
-//                ->select(['stores.name as group', 'stores.description as group_description',
-//                    'files.path as image_url','files2.path as file_url',
-//                    'own.name as owner', 'own.email as owners_email', 'own.cellphone as owners_cellphone'])
-//                ->join('users as own', 'own.id', '=', 'stores.user_id')
-//                ->join('stores_users', 'stores_users.store_id', '=', 'stores.id')
-//                ->join('users', 'users.id', '=', 'stores_users.user_id')
-//                ->leftJoin('files', 'files.id', '=', 'stores.image_id')
-//                ->leftJoin('files as files2', 'files2.id', '=', 'stores.file_id')
-//                ->where('stores.active', '=', 1)
-//                ->where('users.id', '=', $user->id)
-//                ->get();
+
+            $isAdmin = $user->hasProfile('administrador');
 
             $userId = $user->id;
-            $groups = Stores::query()->with(['user','image', 'users' => function ($q) use ($userId) {
-                $q->where('user_id', $userId);
-            }])->get()->toArray();
+            $groups = Stores::query()
+                ->with(['user','image'])
+                ->where('active', 1)
+                ->select(['id', 'name', 'user_id', 'description', 'image_id']);
 
+            if(!$isAdmin){
+                $groups->where(function($q) use ($userId) {
+                    $q->whereHas('users', function($q) use ($userId) {
+                        $q->where('user_id', $userId);
+                    });
+                    $q->orWhere('user_id', $userId);
+                });
+            }
+
+            $groups = $groups->get()->toArray();
 
             return response([
                 'status' => 'success',

@@ -1,23 +1,24 @@
-<div fxLayout="column" fxLayoutGap="20px" *ngIf="'stores.list' | user | async">
-    <div>
-        <mat-toolbar color="basic">
-            <mat-toolbar-row>
-                <span>Grupos de Vendas</span>
-                <span class="mattoolbar-spacer"></span>
-                <a [routerLink]="['/admin/group-create/']" *ngIf="'stores.store' | user | async">
-                <mat-icon class="mattoolbar-icon cursor">add</mat-icon></a>
-            </mat-toolbar-row>
-        </mat-toolbar>
-    </div>
-    <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="start center" *ngIf="myGroups">
-        <div fxFlex.lg="33%" fxFlex.md="50%" *ngFor="let item of myGroups">
-            <mat-card class="example-card">
+<div>
+    <mat-toolbar color="basic">
+        <mat-toolbar-row>
+            <span>Grupos de Vendas</span>
+            <span class="mattoolbar-spacer"></span>
+            <button mat-icon-button color="warn" aria-label="Example icon-button with a heart icon" [routerLink]="['/admin/group-create/']" *ngIf="'stores.store' | user | async">
+                <mat-icon>add</mat-icon>
+            </button>
+        </mat-toolbar-row>
+    </mat-toolbar>
+</div>
+<div>&nbsp;</div>
+<div *ngIf="'stores.list' | user | async">
+    <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="start center" *ngIf="myGroups" fxLayoutWrap fxLayoutGap="20px grid">
+        <div fxFlex.lg="33%" fxFlex.md="50%" fxFlex.sm="100%" *ngFor="let item of myGroups">
+            <mat-card class="card-groups">
                 <mat-card-header>
                     <div *ngIf="item.image" mat-card-avatar class="header-image" [style.backgroundImage]="'url('+ item.image.url_thumb +')'"></div>
                     <mat-card-title>{{item.name}}</mat-card-title>
-                    <mat-card-subtitle>Responsável: {{item.user.name}}</mat-card-subtitle>
+                    <mat-card-subtitle class="text-truncate">{{item.user.name}}</mat-card-subtitle>
                 </mat-card-header>
-                <!--<img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">-->
                 <mat-card-content>
                     <p>{{item.description}}</p>
                 </mat-card-content>

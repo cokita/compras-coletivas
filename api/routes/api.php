@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::group(['prefix' => 'my'], function () {
             Route::get('/list', ['as' => 'store.my.list', 'uses' => 'StoreController@myStores']);
         });
+        Route::post('/', ['as' => 'groups.store', 'uses' => 'StoreController@store']);
     });
 
     Route::group(['prefix' => 'file'], function () {

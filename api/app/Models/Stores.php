@@ -16,10 +16,15 @@ class Stores extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function users()
+    public function usersPivot()
     {
         return $this->belongsToMany(User::class, 'stores_users',
             'store_id', 'user_id')->withTimestamps();
+    }
+
+    public function users()
+    {
+        return $this->hasMany(StoresUsers::class, 'store_id', 'id');
     }
 
     public function image()

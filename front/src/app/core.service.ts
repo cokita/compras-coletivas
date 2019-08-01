@@ -24,18 +24,27 @@ export class CoreService {
         });
     }
 
-    private getOptions(){
-        let headers = new HttpHeaders({'Content-Type': 'application/json'});
+    private getOptions(newHeader?){
+        let headers = new HttpHeaders({'Accept': 'application/json'});
         if(this.getToken()){
             headers = headers.set('Authorization', 'Bearer ' + this.getToken());
+        }
+        if(newHeader && newHeader instanceof Array){
+            newHeader.forEach(obj => {
+                if(obj) {
+                    headers = headers.set(obj.header, obj.value);
+                }
+            });
+        }else{
+            headers = headers.set('Content-Type', 'application/json');
         }
 
         return this.options = { headers: headers, params: {} };
     }
 
-    public post(url, data): Observable<any> {
+    public post(url, data, headers?): Observable<any> {
         return this.http
-            .post(`${this.GC.API_ENDPOINT}/${url}`, data, this.getOptions());
+            .post(`${this.GC.API_ENDPOINT}/${url}`, data, this.getOptions(headers));
     }
 
     public remove(url): Observable<any> {
