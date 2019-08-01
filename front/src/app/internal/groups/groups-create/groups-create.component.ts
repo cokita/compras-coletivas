@@ -17,7 +17,7 @@ import {Router} from "@angular/router";
 
 })
 export class GroupsCreateComponent implements OnInit {
-    @ViewChild('fileInput') fileInput: ElementRef;
+    @ViewChild('fileInput',{static: true}) fileInput: ElementRef;
 
     groupForm: FormGroup;
     validateFormControl = new FormControl('', [
