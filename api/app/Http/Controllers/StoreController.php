@@ -30,11 +30,13 @@ class StoreController extends Controller
             $this->page = $data['page'];
         }
 
-        $stores = Stores::query();
-
         if(!empty($data['with'])){
-            $stores->with($data['with']);
+            $with = explode(',', $data['with']);
+            $stores = Stores::with($with);
+        }else{
+            $stores = Stores::query();
         }
+
         if(!empty($data['id'])){
             $stores->where('id', '=', $data['id']);
         }
@@ -130,7 +132,17 @@ class StoreController extends Controller
      */
     public function show($id)
     {
-        $store = Stores::find($id);
+        $data = collect(request()->all());
+
+        if(!empty($data['with'])){
+            $with = explode(',', $data['with']);
+            $store = Stores::with($with);
+        }else{
+            $store = Stores::query();
+        }
+
+        $store = $store->where('id', $id)->first();
+
         return response([
             'status' => 'success',
             'data' => $store

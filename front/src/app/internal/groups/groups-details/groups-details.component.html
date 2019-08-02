@@ -1,16 +1,28 @@
-<div fxLayout="column" fxLayoutGap="20px">
-    <div>
+<div *ngIf="group">
+    <div fxLayout="column" fxLayoutGap="20px">
         <mat-toolbar color="basic">
             <mat-toolbar-row>
-                <span>Grupo XXX</span>
+                <span>{{group.name}}</span>
                 <span class="mattoolbar-spacer"></span>
-                <a [routerLink]="['/admin/','group-settings']">
-                    <mat-icon class="mattoolbar-icon">settings</mat-icon>
-                </a>
+                <button mat-icon-button color="warn"
+                        [routerLink]="['/admin/','group-settings']" *ngIf="'stores.update' | user | async">
+                    <mat-icon>settings</mat-icon>
+                </button>
             </mat-toolbar-row>
         </mat-toolbar>
     </div>
-    <div>
-
-    </div>
+    <mat-card>
+        <mat-card-content class="full-width">
+            <div fxLayoutAlign="start" fxLayout="row" fxLayout.xs="column">
+                <div>
+                    <mat-card>
+                        <mat-icon class="fs-120 color-grey-500 auto-widht" *ngIf="!group.image">camera_alt</mat-icon>
+                        <img [src]="(group.image && group.image.url_thumb) ? group.image.url_thumb : null" height="200">
+                    </mat-card>
+                </div>
+                <div><h4>{{group.name}}</h4></div>
+            </div>
+            <div>sasd</div>
+        </mat-card-content>
+    </mat-card>
 </div>

@@ -29,4 +29,8 @@ export class GroupsService {
         });
     }
 
+    show(id,params):any{
+        return this.coreService.get(`store/`+id, params).pipe(map(res => res.data));
+    }
+
 }

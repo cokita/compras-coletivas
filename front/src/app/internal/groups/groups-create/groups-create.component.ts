@@ -34,7 +34,7 @@ export class GroupsCreateComponent implements OnInit {
 
 
     constructor(private formBuilder: FormBuilder,private cd: ChangeDetectorRef, private userService: UserService,
-                private coreService:CoreService, private groupService: GroupsService) {
+                private groupService: GroupsService) {
     }
 
     ngOnInit() {

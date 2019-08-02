@@ -17,7 +17,7 @@ const routes: Routes = [
         { path: '', redirectTo: 'home', pathMatch: 'full' },
         { path: 'home', component: HomeComponent },
         { path: 'groups', component: GroupsComponent },
-        { path: 'group-detail', component: GroupsDetailsComponent },
+        { path: 'group-detail/:id', component: GroupsDetailsComponent },
         { path: 'group-settings', component: GroupsSettingsComponent },
         { path: 'group-create', component: GroupsCreateComponent},
     ],
