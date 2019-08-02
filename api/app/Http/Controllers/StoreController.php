@@ -100,7 +100,7 @@ class StoreController extends Controller
 
             if($data->get('image')){
                 $fileService = new FileService();
-                $file = $fileService->salvar($data->get('image'), 'store/'.$store->id);
+                $file = $fileService->salvar($data->get('image'), 'stores/'.$store->id);
                 $fileService->uploadImageByBinary($data->get('image'), $file);
                 $store->image_id = $file->id;
                 $store->save();
