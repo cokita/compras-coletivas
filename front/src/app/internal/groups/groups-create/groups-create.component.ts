@@ -34,8 +34,7 @@ export class GroupsCreateComponent implements OnInit {
 
 
     constructor(private formBuilder: FormBuilder,private cd: ChangeDetectorRef, private userService: UserService,
-                private coreService:CoreService, private groupService: GroupsService,
-                public snackBar: MatSnackBar, private router: Router) {
+                private coreService:CoreService, private groupService: GroupsService) {
     }
 
     ngOnInit() {
@@ -78,12 +77,7 @@ export class GroupsCreateComponent implements OnInit {
     save() {
         const formModel = this.prepareSave();
         this.groupService.create(formModel).add(result => {
-            this.snackBar.open('Grupo cadastrado com sucesso!', null, {
-                duration: 2000,
-                verticalPosition: 'bottom',
-                horizontalPosition:'right'
-            });
-            this.router.navigate(['/admin/groups']);
+            console.log(result);
         });
     }
 
