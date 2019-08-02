@@ -7,6 +7,7 @@ use App\Models\StoresUsers;
 use App\Models\User;
 use App\Services\FileService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -70,6 +71,7 @@ class StoreController extends Controller
     public function store()
     {
         try {
+            DB::beginTransaction();
             $data = collect(request()->all());
 
             validate($data->toArray(), [
@@ -105,13 +107,14 @@ class StoreController extends Controller
                 $store->image_id = $file->id;
                 $store->save();
             }
-
+            DB::commit();
             return response()->json([
                 'status' => 'success',
                 'data' => $store
             ]);
 
         }catch (\Exception $e){
+            DB::rollback();
             return response([
                 'status' => 'error',
                 'message' => $e->getMessage()
