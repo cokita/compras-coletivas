@@ -18,7 +18,7 @@ const routes: Routes = [
         { path: 'home', component: HomeComponent },
         { path: 'groups', component: GroupsComponent },
         { path: 'group-detail/:id', component: GroupsDetailsComponent },
-        { path: 'group-settings', component: GroupsSettingsComponent },
+        { path: 'group-settings/:id', component: GroupsSettingsComponent },
         { path: 'group-create', component: GroupsCreateComponent},
     ],
     canActivate: [UserGuard],

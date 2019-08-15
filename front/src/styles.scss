@@ -29,6 +29,26 @@
   .mg-#{$i} { margin-right: $i + 0px }
 }
 
+@for $i from 1 through 100{
+  .p-#{$i} { padding: $i + 0px }
+}
+
+@for $i from 1 through 100{
+  .pb-#{$i} { padding-bottom: $i + 0px }
+}
+
+@for $i from 1 through 100{
+  .pt-#{$i} { padding-top: $i + 0px }
+}
+
+@for $i from 1 through 100{
+  .pl-#{$i} { padding-left: $i + 0px }
+}
+
+@for $i from 1 through 100{
+  .pg-#{$i} { padding-right: $i + 0px }
+}
+
 
 .mattoolbar-spacer {
   flex: 1 1 auto;
@@ -48,4 +68,21 @@
 
 .auto-widht{
   width: auto !important;
+}
+
+.clearfix{
+  clear: both;
+}
+
+.image-upload>input {
+  display: none;
+}
+
+.camera-upload{
+  font-size: 150px;
+  width: 100% !important;
+}
+
+.img-h100{
+  height:100%;
 }

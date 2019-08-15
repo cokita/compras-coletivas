@@ -11,11 +11,14 @@ import { CommonModule } from '@angular/common';
 import { MaskDirective } from './mask.directive';
 import { UserPipe } from './pipes/user.pipe';
 import {NgxSpinnerModule} from "ngx-spinner";
+import { UploadImageComponent } from './components/upload-image/upload-image.component';
 
 @NgModule({
-  declarations: [MaskDirective, UserPipe],
+  declarations: [MaskDirective, UserPipe, UploadImageComponent],
   imports: [
-      NgxSpinnerModule
+      MaterialSharedModule,
+      NgxSpinnerModule,
+      CommonModule
   ],
   exports: [
     MaskDirective,
@@ -27,7 +30,8 @@ import {NgxSpinnerModule} from "ngx-spinner";
     HttpClientModule,
     FlexLayoutModule,
     UserPipe,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    UploadImageComponent
   ]
 })
 export class SharedModule {

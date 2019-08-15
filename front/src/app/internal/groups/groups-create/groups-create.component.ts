@@ -92,7 +92,6 @@ export class GroupsCreateComponent implements OnInit {
     }
 
     private prepareSave(): any {
-            console.log(this.fileInput);
         const formData = new FormData();
         formData.append('user_id', this.f.user_id.value.id);
         formData.append('name', this.f.name.value);

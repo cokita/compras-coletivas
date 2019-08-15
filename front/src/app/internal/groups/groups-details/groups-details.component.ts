@@ -8,7 +8,7 @@ import {ActivatedRoute} from "@angular/router";
   styleUrls: ['./groups-details.component.scss']
 })
 export class GroupsDetailsComponent implements OnInit {
-  groupId: Integer;
+  groupId: any;
   group:any = null;
   constructor(private groupService: GroupsService, private _route: ActivatedRoute) { }
 

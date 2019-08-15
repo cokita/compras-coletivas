@@ -5,24 +5,34 @@
         </button>
         <mat-menu #mainMenu="matMenu" class="mymegamenu">
             <button mat-menu-item [routerLink]="['/login']">
-                <mat-icon>account_circle</mat-icon> Área Restrita </button>
+                <mat-icon>account_circle</mat-icon>
+                Área Restrita
+            </button>
             <button mat-menu-item [routerLink]="['/register']">
-                <mat-icon>face</mat-icon> Cadastrar </button>
+                <mat-icon>face</mat-icon>
+                Cadastrar
+            </button>
         </mat-menu>
     </div>
     <div class="container">
         <div fxLayout="row" fxLayout.xs="column" fxFlexFill>
             <div fxFlex="40%" class="left-size" fxLayoutAlign="center start">
                 <div fxLayout="column" fxLayout.xs="column" fxFlexFill>
-                    <div fxFlex="33" fxLayoutAlign="center end" ></div>
-                    <div fxFlex="33" class="slogan text-center">Gerencie suas compras coletivas com </div>
-                    <div fxFlex="34"></div>
+                    <div fxFlex="40" fxLayoutAlign="center center">
+                        <p class="slogan text-center">VENDEDORA <br> Gerencie suas compras coletivas.</p>
+                    </div>
+                    <div fxFlex="20" fxLayoutAlign="center center">
+
+                    </div>
+                    <div fxFlex="40" fxLayoutAlign="center">
+                        <img src="../../../assets/images/salleswoman.png" class="img-h100">
+                    </div>
                 </div>
             </div>
             <div fxFlex="60%" class="right-size">
                 <div fxLayout="column" fxLayout.xs="column" fxFlexFill>
                     <div class="right-top" fxFlex="40" fxLayoutAlign="center center">
-                        <!--<mat-icon class="font-people">people</mat-icon>-->
+                        <p class="slogan text-center">CLIENTE <br> Compre as melhores marcas com os menores preços.</p>
                     </div>
                     <div class="right-middle" fxFlex="20" fxLayoutAlign="center center">
                         <div fxHide.md fxHide.xs fxHide.sm class="title title-lg">
@@ -42,9 +52,8 @@
                     </div>
                     <div class="right-bottom" fxFlex="40">
                         <div fxLayout="column" fxLayout.xs="column" fxFlexFill>
-                            <div fxFlex="45%"></div>
-                            <div fxFlex="45%" fxLayoutAlign="center start">
-                                <!--<mat-icon class="font-people">people</mat-icon>-->
+                            <div fxFlex="90%" fxLayoutAlign="center center">
+                                <img src="../../../assets/images/shopping2.png" class="img-h100">
                             </div>
                             <div fxFlex="10%" fxLayoutAlign="end end" class="copyright">
                                 Copyright © 2019 - Todos os direitos reservados à André & Ana Flávia

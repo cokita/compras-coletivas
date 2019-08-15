@@ -1,0 +1,22 @@
+<mat-card>
+    <div class="image-upload text-align-center" *ngIf="!imagePreviewSrc && !imageCopy">
+        <label for="file-input">
+            <mat-icon class="color-grey-500 cursor camera-upload">add_a_photo</mat-icon>
+        </label>
+        <input type="file" id="file-input" (change)="onFileChange($event)" #fileInput
+           accept="image/png, image/jpeg">
+    </div>
+    <div>
+    <div class="image-upload text-align-center" *ngIf="imageCopy && (imageCopy.url_thumb || imageCopy.url)">
+        <label for="file-input2">
+        <img [src]="imageCopy.url_thumb || imageCopy.url" height="200" class="cursor">
+        </label>
+        <input type="file" id="file-input2" (change)="onFileChange($event)" #fileInput
+               accept="image/png, image/jpeg">
+    </div>
+    </div>
+    <div class="text-align-center" *ngIf="imagePreviewSrc">
+        <img [src]="imagePreviewSrc" height="200">
+        <div (click)="clearFile()" class="cursor">Remover</div>
+    </div>
+</mat-card>
